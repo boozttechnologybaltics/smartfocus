@@ -1,13 +1,13 @@
 <?php
 
-namespace Estina\Smartfocus\Api;
+namespace Estina\SmartFocus\Api;
 
 /**
  * Simple object oriented cURL wrapper
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class SmartfocusApiClient implements SmartfocusApiClientInterface
+class SmartFocusApiClient implements SmartFocusApiClientInterface
 {
     /** @var string */
     private $urlPrefix;
@@ -16,7 +16,6 @@ class SmartfocusApiClient implements SmartfocusApiClientInterface
 
     /**
      * Constructor
-     *
      *
      * @param int $timeout The maximum number of seconds to allow cURL functions to execute, default - 10
      */

@@ -1,8 +1,8 @@
 <?php
 
-namespace Estina\Smartfocus\Api\Rest;
+namespace Estina\SmartFocus\Api\Rest;
 
-use Estina\Smartfocus\Api\SmartfocusApiClientInterface;
+use Estina\SmartFocus\Api\SmartFocusApiClientInterface;
 
 /**
  * Data Mass Update REST API
@@ -17,10 +17,10 @@ class DataMassUpdate
     /**
      * Constructor
      *
-     * @param SmartfocusApiClientInterface $client Instance of Smarfocus API client
+     * @param SmartFocusApiClientInterface $client Instance of SmartFocus API client
      * @param string                       $server Web service host
      */
-    public function __construct(SmartfocusApiClientInterface $client, $server)
+    public function __construct(SmartFocusApiClientInterface $client, $server)
     {
         $this->client = $client;
         $this->client->setUrlPrefix(sprintf('https://%s/apibatchmember/services/rest', $server));
