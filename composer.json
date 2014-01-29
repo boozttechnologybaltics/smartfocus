@@ -1,0 +1,22 @@
+{
+    "name": "estina/smartfocus",
+    "description": "SmartFocus API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mindaugas Liubinas",
+            "email": "mindaugas.l@estina.lt",
+            "homepage": "http://www.estina.com/"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-0" : {
+            "Estina\\SmartFocus" : "src"
+        }
+    }
+}
