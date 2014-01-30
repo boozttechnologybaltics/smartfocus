@@ -9,7 +9,7 @@ use Estina\SmartFocus\Api\Http\ClientInterface;
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class SmartFocusApiClient implements ClientInterface
+class Client implements ClientInterface
 {
     /** @var string */
     private $urlPrefix;
