@@ -37,7 +37,7 @@ class DataIndividualUpdate
      * @param string $password API password
      * @param string $key      The manager key copied from SmartFocus
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function openConnection($login, $password, $key)
     {
@@ -51,7 +51,7 @@ class DataIndividualUpdate
      *
      * @param string $token token
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function closeConnection($token)
     {
@@ -69,7 +69,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $email Email
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function insertMemberByEmailAddress($token, $email)
     {
@@ -87,7 +87,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $xml   XML input body
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function insertMember($token, $xml)
     {
@@ -108,7 +108,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $xml   XML input body
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function updateMember($token, $xml)
     {
@@ -132,7 +132,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $xml   XML input body
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function insertOrUpdateMember($token, $xml)
     {
@@ -156,7 +156,7 @@ class DataIndividualUpdate
      * @param string $field The field that will be updated.
      * @param string $value The value with which to update the field
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function updateMemberByEmailAddress($token, $email, $field, $value)
     {
@@ -174,7 +174,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param int    $jobId The job ID
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function getMemberJobStatus($token, $jobId)
     {
@@ -191,7 +191,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $email Email
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function getMemberByEmail($token, $email)
     {
@@ -209,7 +209,7 @@ class DataIndividualUpdate
      * @param string $token     Token
      * @param string $cellphone The cellphone number of the member
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function getMemberByCellphone($token, $cellphone)
     {
@@ -226,7 +226,7 @@ class DataIndividualUpdate
      * @param string $token    Token
      * @param int    $memberId The ID of the member you want to retrieve
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function getMemberById($token, $memberId)
     {
@@ -244,7 +244,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param int    $page  The page number
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function getMembersByPage($token, $page)
     {
@@ -261,7 +261,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $xml   XML input body
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function getMembersByCriteria($token, $xml)
     {
@@ -279,7 +279,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $xml   XML input body
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function getMemberTableColumnNames($token, $xml)
     {
@@ -296,7 +296,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $email Email
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function unsubscribeMemberByEmail($token, $email)
     {
@@ -314,7 +314,7 @@ class DataIndividualUpdate
      * @param string $token     Token
      * @param string $cellphone The cellphone number of the member
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function unsubscribeMemberByCellphone($token, $cellphone)
     {
@@ -331,7 +331,7 @@ class DataIndividualUpdate
      * @param string $token    Token
      * @param int    $memberId The ID of the member you want to retrieve
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function unsubscribeMemberById($token, $memberId)
     {
@@ -348,7 +348,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $xml   XML input body
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function unsubscribeMemberByValue($token, $xml)
     {
@@ -372,7 +372,7 @@ class DataIndividualUpdate
      * @param string $token Token
      * @param string $email Email
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function resubscribeMemberByEmail($token, $email)
     {
@@ -396,7 +396,7 @@ class DataIndividualUpdate
      * @param string $token     Token
      * @param string $cellphone The cellphone number of the member
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function resubscribeMemberByCellphone($token, $cellphone)
     {
@@ -418,7 +418,7 @@ class DataIndividualUpdate
      * @param string $token    Token
      * @param int    $memberId The ID of the member you want to retrieve
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function resubscribeMemberById($token, $memberId)
     {

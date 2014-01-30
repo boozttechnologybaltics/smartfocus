@@ -43,7 +43,7 @@ class Client implements ClientInterface
      *
      * @param string $url URL
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function get($url)
     {
@@ -60,7 +60,7 @@ class Client implements ClientInterface
      * @param string $url URL
      * @param string $xml XML request body
      *
-     * @return string|false
+     * @return mixed - XML string or FALSE on failure
      */
     public function post($url, $xml)
     {
