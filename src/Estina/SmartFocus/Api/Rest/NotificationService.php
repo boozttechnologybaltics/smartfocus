@@ -2,7 +2,7 @@
 
 namespace Estina\SmartFocus\Api\Rest;
 
-use Estina\SmartFocus\Api\SmartFocusApiClientInterface;
+use Estina\SmartFocus\Api\Http\ClientInterface;
 
 /**
  * Transactional Messaging Trigger API
@@ -17,9 +17,9 @@ class NotificationService
     /**
      * Constructor
      *
-     * @param SmartFocusApiClientInterface $client Instance of SmartFocus API client
+     * @param ClientInterface $client Instance of SmartFocus API HTTP client
      */
-    public function __construct(SmartFocusApiClientInterface $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
         $this->client->setUrlPrefix('http://api.notificationmessaging.com');

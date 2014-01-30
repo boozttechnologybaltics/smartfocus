@@ -1,13 +1,15 @@
 <?php
 
-namespace Estina\SmartFocus\Api;
+namespace Estina\SmartFocus\Api\Http;
+
+use Estina\SmartFocus\Api\Http\ClientInterface;
 
 /**
  * Simple object oriented cURL wrapper
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class SmartFocusApiClient implements SmartFocusApiClientInterface
+class SmartFocusApiClient implements ClientInterface
 {
     /** @var string */
     private $urlPrefix;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Estina\SmartFocus\Api;
+namespace Estina\SmartFocus\Api\Http;
 
 /**
- * Interface of SmartFocus API client
+ * Interface of SmartFocus API HTTP client
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-interface SmartFocusApiClientInterface
+interface ClientInterface
 {
     /**
      * @param string $urlPrefix Common URL prefix for all calls

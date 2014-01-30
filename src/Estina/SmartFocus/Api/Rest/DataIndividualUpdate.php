@@ -2,7 +2,7 @@
 
 namespace Estina\SmartFocus\Api\Rest;
 
-use Estina\SmartFocus\Api\SmartFocusApiClientInterface;
+use Estina\SmartFocus\Api\Http\ClientInterface;
 
 /**
  * Individual Member Management REST API
@@ -11,16 +11,16 @@ use Estina\SmartFocus\Api\SmartFocusApiClientInterface;
  */
 class DataIndividualUpdate
 {
-    /** @var Client */
+    /** @var HTTP Client */
     private $client;
 
     /**
      * Constructor
      *
-     * @param SmartFocusApiClientInterface $client Instance of SmartFocus API client
-     * @param string                       $server Web service host
+     * @param ClientInterface $client Instance of SmartFocus API HTTP client
+     * @param string          $server Web service host
      */
-    public function __construct(SmartFocusApiClientInterface $client, $server)
+    public function __construct(ClientInterface $client, $server)
     {
         $this->client = $client;
         $this->client->setUrlPrefix(sprintf('https://%s/apimember/services/rest', $server));
