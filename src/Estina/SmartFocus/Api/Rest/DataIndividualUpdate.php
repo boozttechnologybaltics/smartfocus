@@ -2,30 +2,13 @@
 
 namespace Estina\SmartFocus\Api\Rest;
 
-use Estina\SmartFocus\Api\Http\ClientInterface;
-
 /**
  * Individual Member Management REST API
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class DataIndividualUpdate
+class DataIndividualUpdate extends AbstractRestService
 {
-    /** @var HTTP Client */
-    private $client;
-
-    /**
-     * Constructor
-     *
-     * @param ClientInterface $client Instance of SmartFocus API HTTP client
-     * @param string          $server Web service host
-     */
-    public function __construct(ClientInterface $client, $server)
-    {
-        $this->client = $client;
-        $this->client->setUrlPrefix(sprintf('https://%s/apimember/services/rest', $server));
-    }
-
     /**
      * This method provides a session token when given valid credentials
      *
@@ -33,15 +16,20 @@ class DataIndividualUpdate
      * tokens, it is recommended that you close your connection after an API
      * call and open a new connection for a new API call.
      *
+     * @param string $server   Web service host
      * @param string $login    The login provided for API access
      * @param string $password API password
      * @param string $key      The manager key copied from SmartFocus
      *
      * @return mixed - XML string or FALSE on failure
      */
-    public function openConnection($login, $password, $key)
+    public function openConnection($server, $login, $password, $key)
     {
-        $response = $this->client->get("connect/open/$login/$password/$key");
+        $this->setUrlPrefix(sprintf('https://%s/apimember/services/rest', $server));
+
+        $response = $this->client->get(
+            $this->getUrl("connect/open/$login/$password/$key")
+        );
 
         return $response;
     }
@@ -55,7 +43,9 @@ class DataIndividualUpdate
      */
     public function closeConnection($token)
     {
-        $response = $this->client->get("connect/close/$token");
+        $response = $this->client->get(
+            $this->getUrl("connect/close/$token")
+        );
 
         return $response;
     }
@@ -73,7 +63,9 @@ class DataIndividualUpdate
      */
     public function insertMemberByEmailAddress($token, $email)
     {
-        $response = $this->client->get("member/insert/$token/$email");
+        $response = $this->client->get(
+            $this->getUrl("member/insert/$token/$email")
+        );
 
         return $response;
     }
@@ -91,7 +83,10 @@ class DataIndividualUpdate
      */
     public function insertMember($token, $xml)
     {
-        $response = $this->client->post("member/insertMember/$token", $xml);
+        $response = $this->client->post(
+            $this->getUrl("member/insertMember/$token"),
+            $xml
+        );
 
         return $response;
     }
@@ -112,7 +107,10 @@ class DataIndividualUpdate
      */
     public function updateMember($token, $xml)
     {
-        $response = $this->client->post("member/updateMember/$token", $xml);
+        $response = $this->client->post(
+            $this->getUrl("member/updateMember/$token"),
+            $xml
+        );
 
         return $response;
     }
@@ -136,7 +134,10 @@ class DataIndividualUpdate
      */
     public function insertOrUpdateMember($token, $xml)
     {
-        $response = $this->client->post("member/insertOrUpdateMember/$token", $xml);
+        $response = $this->client->post(
+            $this->getUrl("member/insertOrUpdateMember/$token"),
+            $xml
+        );
 
         return $response;
     }
@@ -160,7 +161,9 @@ class DataIndividualUpdate
      */
     public function updateMemberByEmailAddress($token, $email, $field, $value)
     {
-        $response = $this->client->get("member/update/$token/$email/$field/$value");
+        $response = $this->client->get(
+            $this->getUrl("member/update/$token/$email/$field/$value")
+        );
 
         return $response;
     }
@@ -178,7 +181,9 @@ class DataIndividualUpdate
      */
     public function getMemberJobStatus($token, $jobId)
     {
-        $response = $this->client->get("member/getMemberJobStatus/$token/$jobId");
+        $response = $this->client->get(
+            $this->getUrl("member/getMemberJobStatus/$token/$jobId")
+        );
 
         return $response;
     }
@@ -195,7 +200,9 @@ class DataIndividualUpdate
      */
     public function getMemberByEmail($token, $email)
     {
-        $response = $this->client->get("member/getMemberByEmail/$token/$email");
+        $response = $this->client->get(
+            $this->getUrl("member/getMemberByEmail/$token/$email")
+        );
 
         return $response;
     }
@@ -213,7 +220,9 @@ class DataIndividualUpdate
      */
     public function getMemberByCellphone($token, $cellphone)
     {
-        $response = $this->client->get("member/getMemberByCellphone/$token/$cellphone");
+        $response = $this->client->get(
+            $this->getUrl("member/getMemberByCellphone/$token/$cellphone")
+        );
 
         return $response;
     }
@@ -230,7 +239,9 @@ class DataIndividualUpdate
      */
     public function getMemberById($token, $memberId)
     {
-        $response = $this->client->get("member/getMemberById/$token/$memberId");
+        $response = $this->client->get(
+            $this->getUrl("member/getMemberById/$token/$memberId")
+        );
 
         return $response;
     }
@@ -248,7 +259,9 @@ class DataIndividualUpdate
      */
     public function getMembersByPage($token, $page)
     {
-        $response = $this->client->get("member/getListMembersByPage/$token/$page");
+        $response = $this->client->get(
+            $this->getUrl("member/getListMembersByPage/$token/$page")
+        );
 
         return $response;
     }
@@ -265,7 +278,10 @@ class DataIndividualUpdate
      */
     public function getMembersByCriteria($token, $xml)
     {
-        $response = $this->client->post("member/getMembers/$token", $xml);
+        $response = $this->client->post(
+            $this->getUrl("member/getMembers/$token"),
+            $xml
+        );
 
         return $response;
     }
@@ -283,7 +299,9 @@ class DataIndividualUpdate
      */
     public function getMemberTableColumnNames($token, $xml)
     {
-        $response = $this->client->get("member/descMemberTable/$token");
+        $response = $this->client->get(
+            $this->getUrl("member/descMemberTable/$token")
+        );
 
         return $response;
     }
@@ -300,7 +318,9 @@ class DataIndividualUpdate
      */
     public function unsubscribeMemberByEmail($token, $email)
     {
-        $response = $this->client->get("member/unjoinByEmail/$token/$email");
+        $response = $this->client->get(
+            $this->getUrl("member/unjoinByEmail/$token/$email")
+        );
 
         return $response;
     }
@@ -318,7 +338,9 @@ class DataIndividualUpdate
      */
     public function unsubscribeMemberByCellphone($token, $cellphone)
     {
-        $response = $this->client->get("member/unjoinByCellphone/$token/$cellphone");
+        $response = $this->client->get(
+            $this->getUrl("member/unjoinByCellphone/$token/$cellphone")
+        );
 
         return $response;
     }
@@ -335,7 +357,9 @@ class DataIndividualUpdate
      */
     public function unsubscribeMemberById($token, $memberId)
     {
-        $response = $this->client->get("member/unjoinByMemberId/$token/$memberId");
+        $response = $this->client->get(
+            $this->getUrl("member/unjoinByMemberId/$token/$memberId")
+        );
 
         return $response;
     }
@@ -352,7 +376,10 @@ class DataIndividualUpdate
      */
     public function unsubscribeMemberByValue($token, $xml)
     {
-        $response = $this->client->post("member/unjoinMember/$token", $xml);
+        $response = $this->client->post(
+            $this->getUrl("member/unjoinMember/$token"),
+            $xml
+        );
 
         return $response;
     }
@@ -376,7 +403,9 @@ class DataIndividualUpdate
      */
     public function resubscribeMemberByEmail($token, $email)
     {
-        $response = $this->client->get("member/rejoinByEmail/$token/$email");
+        $response = $this->client->get(
+            $this->getUrl("member/rejoinByEmail/$token/$email")
+        );
 
         return $response;
     }
@@ -400,7 +429,9 @@ class DataIndividualUpdate
      */
     public function resubscribeMemberByCellphone($token, $cellphone)
     {
-        $response = $this->client->get("member/rejoinByCellphone/$token/$cellphone");
+        $response = $this->client->get(
+            $this->getUrl("member/rejoinByCellphone/$token/$cellphone")
+        );
 
         return $response;
     }
@@ -422,7 +453,9 @@ class DataIndividualUpdate
      */
     public function resubscribeMemberById($token, $memberId)
     {
-        $response = $this->client->get("member/rejoinByMemberId/$token/$memberId");
+        $response = $this->client->get(
+            $this->getUrl("member/rejoinByMemberId/$token/$memberId")
+        );
 
         return $response;
     }

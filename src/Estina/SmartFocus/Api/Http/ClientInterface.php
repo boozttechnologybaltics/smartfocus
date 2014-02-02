@@ -10,11 +10,6 @@ namespace Estina\SmartFocus\Api\Http;
 interface ClientInterface
 {
     /**
-     * @param string $urlPrefix Common URL prefix for all calls
-     */
-    public function setUrlPrefix($urlPrefix);
-
-    /**
      * Performs GET request
      *
      * @param string $url URL

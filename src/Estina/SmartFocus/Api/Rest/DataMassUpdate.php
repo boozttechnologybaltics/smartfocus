@@ -2,30 +2,13 @@
 
 namespace Estina\SmartFocus\Api\Rest;
 
-use Estina\SmartFocus\Api\Http\ClientInterface;
-
 /**
  * Data Mass Update REST API
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class DataMassUpdate
+class DataMassUpdate extends AbstractRestService
 {
-    /** @var HTTP Client */
-    private $client;
-
-    /**
-     * Constructor
-     *
-     * @param ClientInterface $client Instance of SmartFocus API HTTP client
-     * @param string          $server Web service host
-     */
-    public function __construct(ClientInterface $client, $server)
-    {
-        $this->client = $client;
-        $this->client->setUrlPrefix(sprintf('https://%s/apibatchmember/services/rest', $server));
-    }
-
     /**
      * This method provides a session token when given valid credentials
      *
@@ -33,15 +16,20 @@ class DataMassUpdate
      * tokens, it is recommended that you close your connection after an API
      * call and open a new connection for a new API call.
      *
+     * @param string $server   Web service host
      * @param string $login    The login provided for API access
      * @param string $password API password
      * @param string $key      The manager key copied from SmartFocus
      *
      * @return string|false
      */
-    public function openConnection($login, $password, $key)
+    public function openConnection($server, $login, $password, $key)
     {
-        $response = $this->client->get("connect/open/$login/$password/$key");
+        $this->setUrlPrefix(sprintf('https://%s/apibatchmember/services/rest', $server));
+
+        $response = $this->client->get(
+            $this->getUrl("connect/open/$login/$password/$key")
+        );
 
         return $response;
     }
@@ -55,7 +43,9 @@ class DataMassUpdate
      */
     public function closeConnection($token)
     {
-        $response = $this->client->get("connect/close/$token");
+        $response = $this->client->get(
+            $this->getUrl("connect/close/$token")
+        );
 
         return $response;
     }

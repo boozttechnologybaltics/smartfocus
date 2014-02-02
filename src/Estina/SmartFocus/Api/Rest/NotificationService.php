@@ -2,29 +2,13 @@
 
 namespace Estina\SmartFocus\Api\Rest;
 
-use Estina\SmartFocus\Api\Http\ClientInterface;
-
 /**
  * Transactional Messaging Trigger API
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class NotificationService
+class NotificationService extends AbstractRestService
 {
-    /** @var Client */
-    private $client;
-
-    /**
-     * Constructor
-     *
-     * @param ClientInterface $client Instance of SmartFocus API HTTP client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        $this->client = $client;
-        $this->client->setUrlPrefix('http://api.notificationmessaging.com');
-    }
-
     /**
      * @param string $email          The email address to which you wish to send the transactional message
      * @param string $encrypt        The encrypt value provided in the interface
@@ -47,6 +31,9 @@ class NotificationService
         $uidkey = '',
         $stype = 'NOTHING'
     ) {
+
+        $this->setUrlPrefix('http://api.notificationmessaging.com');
+
         $params = array(
             'random' => $random,
             'encrypt' => $encrypt,
@@ -57,8 +44,9 @@ class NotificationService
             'dyn' => $dyn,
         );
 
-        $url = "NMSREST?" . http_build_query($data);
-        $response = $this->client->get($url);
+        $response = $this->client->get(
+            $this->getUrl("NMSREST?" . http_build_query($data))
+        );
 
         return $response;
     }

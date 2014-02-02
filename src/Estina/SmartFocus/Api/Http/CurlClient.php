@@ -9,10 +9,8 @@ use Estina\SmartFocus\Api\Http\ClientInterface;
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class Client implements ClientInterface
+class CurlClient implements ClientInterface
 {
-    /** @var string */
-    private $urlPrefix;
     /** @var int */
     private $timeout;
 
@@ -31,14 +29,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param string $urlPrefix Common URL prefix for all calls
-     */
-    public function setUrlPrefix($urlPrefix)
-    {
-        $this->urlPrefix = $urlPrefix;
-    }
-
-    /**
      * Performs GET request
      *
      * @param string $url URL
@@ -47,7 +37,7 @@ class Client implements ClientInterface
      */
     public function get($url)
     {
-        $ch = $this->curlInit($this->getUrl($url));
+        $ch = $this->curlInit($url);
         $response = curl_exec($ch);
         curl_close($ch);
 
@@ -64,7 +54,7 @@ class Client implements ClientInterface
      */
     public function post($url, $xml)
     {
-        $ch = $this->curlInit($this->getUrl($url));
+        $ch = $this->curlInit($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -97,17 +87,5 @@ class Client implements ClientInterface
         curl_setopt($ch, CURLOPT_HEADER, 0);
 
         return $ch;
-    }
-
-    /**
-     * Returns API URL
-     *
-     * @param string $url URL suffix
-     *
-     * @return string
-     */
-    private function getUrl($url)
-    {
-        return $this->urlPrefix . '/' . $url;
     }
 }
