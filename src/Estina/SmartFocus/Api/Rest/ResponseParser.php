@@ -22,7 +22,7 @@ class ResponseParser
     }
 
     /**
-     * Returns token from the response string
+     * Returns value of the node "result" from the response XML string
      *
      * @param string $response Response
      *
@@ -30,7 +30,7 @@ class ResponseParser
      *
      * @return string
      */
-    public function getToken($response)
+    public function getResult($response)
     {
         $xml = simplexml_load_string($response);
         if (!$xml instanceof \SimpleXMLElement) {
