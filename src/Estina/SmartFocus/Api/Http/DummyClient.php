@@ -1,6 +1,8 @@
 <?php
 
-namespace Estina\Smartfocus\Api;
+namespace Estina\SmartFocus\Api\Http;
+
+use Estina\SmartFocus\Api\Http\ClientInterface;
 
 /**
  * Dummy Client for tests
@@ -8,19 +10,8 @@ namespace Estina\Smartfocus\Api;
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-class SmartfocusApiDummyClient implements SmartfocusApiClientInterface
+class DummyClient implements ClientInterface
 {
-    /** @var string */
-    private $urlPrefix;
-
-    /**
-     * @param string $urlPrefix Common URL prefix for all calls
-     */
-    public function setUrlPrefix($urlPrefix)
-    {
-        $this->urlPrefix = $urlPrefix;
-    }
-
     /**
      * Performs GET request
      *
@@ -30,7 +21,7 @@ class SmartfocusApiDummyClient implements SmartfocusApiClientInterface
      */
     public function get($url)
     {
-        return $this->urlPrefix . '/' . $url;
+        return $url;
     }
 
     /**
@@ -43,6 +34,6 @@ class SmartfocusApiDummyClient implements SmartfocusApiClientInterface
      */
     public function post($url, $xml)
     {
-        return $this->urlPrefix . '/' . $url;
+        return $xml;
     }
 }
