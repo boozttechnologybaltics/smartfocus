@@ -42,8 +42,8 @@ update as you normally do:
 
 ```php
 use Estina\SmartFocus\Api\Http\CurlClient;
-use Estina\SmartFocus\Api\Rest\DataIndividualUpdate;
-use Estina\SmartFocus\Api\Rest\ResponseParser;
+use Estina\SmartFocus\Api\Rest\Member;
+use Estina\SmartFocus\Api\Util\RestResponseParser;
 
 $config = array(
     'server'    => 'server hostname',
@@ -68,14 +68,8 @@ if ($response) {
 
 ## Supported APIs and Methods
 
-- [Batch Member REST] (#batch-member-rest)
 - [Member REST] (#member-rest)
 - [Notification REST] (#notification-rest)
-
-### Batch Member REST
-
-- openConnection($server, $login, $password, $key)
-- closeConnection($token)
 
 ### Member REST
 
