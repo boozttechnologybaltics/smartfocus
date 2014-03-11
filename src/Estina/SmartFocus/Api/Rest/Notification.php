@@ -7,7 +7,7 @@ namespace Estina\SmartFocus\Api\Rest;
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class NotificationService extends AbstractRestService
+class Notification extends AbstractRestService
 {
     /**
      * @param string $email          The email address to which you wish to send the transactional message

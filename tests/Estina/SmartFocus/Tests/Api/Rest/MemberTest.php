@@ -5,14 +5,14 @@ namespace Estina\SmartFocus\Tests;
 use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
 
-use Estina\SmartFocus\Api\Rest\DataIndividualUpdate;
+use Estina\SmartFocus\Api\Rest\Member;
 
 /**
- * Individual Member Management REST API
+ * Member Test
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class DataIndividualUpdateTest extends PHPUnit_Framework_TestCase
+class MemberTest extends PHPUnit_Framework_TestCase
 {
     private $token = 'testtoken';
     private $xml = '<xml>testxml</xml>';
@@ -290,12 +290,12 @@ class DataIndividualUpdateTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @return DataIndividualUpdate
+     * @return Member
      */
     private function getService($openConnection = true)
     {
         $client = $this->getMock('Estina\SmartFocus\Api\Http\CurlClient');
-        $service = new DataIndividualUpdate($client);
+        $service = new Member($client);
 
         if ($openConnection) {
             $server = 'localhost';

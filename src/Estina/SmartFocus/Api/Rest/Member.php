@@ -7,7 +7,7 @@ namespace Estina\SmartFocus\Api\Rest;
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class DataIndividualUpdate extends AbstractRestService
+class Member extends AbstractRestService
 {
     /**
      * This method provides a session token when given valid credentials

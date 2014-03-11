@@ -5,14 +5,14 @@ namespace Estina\SmartFocus\Tests;
 use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
 
-use Estina\SmartFocus\Api\Rest\NotificationService;
+use Estina\SmartFocus\Api\Rest\Notification;
 
 /**
- * Individual Member Management REST API
+ * Notification REST Service test
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class NotificationServiceTest extends PHPUnit_Framework_TestCase
+class NotificationTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tests send
@@ -34,12 +34,12 @@ class NotificationServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return NotificationService
+     * @return Notification
      */
     private function getService($openConnection = true)
     {
         $client = $this->getMock('Estina\SmartFocus\Api\Http\CurlClient');
-        $service = new NotificationService($client);
+        $service = new Notification($client);
 
         return $service;
     }

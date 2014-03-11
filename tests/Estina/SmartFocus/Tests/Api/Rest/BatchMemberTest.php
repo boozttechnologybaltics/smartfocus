@@ -5,14 +5,14 @@ namespace Estina\SmartFocus\Tests;
 use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
 
-use Estina\SmartFocus\Api\Rest\DataMassUpdate;
+use Estina\SmartFocus\Api\Rest\BatchMember;
 
 /**
- * Individual Member Management REST API
+ * Batch Member Test
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class DataMassUpdateTest extends PHPUnit_Framework_TestCase
+class BatchMemberTest extends PHPUnit_Framework_TestCase
 {
     private $token = 'testtoken';
 
@@ -57,12 +57,12 @@ class DataMassUpdateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return DataMassUpdate
+     * @return BatchMember
      */
     private function getService($openConnection = true)
     {
         $client = $this->getMock('Estina\SmartFocus\Api\Http\CurlClient');
-        $service = new DataMassUpdate($client);
+        $service = new BatchMember($client);
 
         if ($openConnection) {
             $server = 'localhost';

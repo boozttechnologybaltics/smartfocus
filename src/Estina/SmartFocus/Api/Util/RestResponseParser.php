@@ -1,13 +1,13 @@
 <?php
 
-namespace Estina\SmartFocus\Api\Rest;
+namespace Estina\SmartFocus\Api\Util;
 
 /**
  * Parser of Smartfocus REST API responses
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class ResponseParser
+class RestResponseParser
 {
     /**
      * Constructor
@@ -26,7 +26,7 @@ class ResponseParser
      *
      * @param string $response Response
      *
-     * @throws \Exception - when it's not possible to parse the response
+     * @throws \InvalidArgumentException - when it's not possible to parse the response
      *
      * @return string
      */
@@ -34,12 +34,12 @@ class ResponseParser
     {
         $xml = simplexml_load_string($response);
         if (!$xml instanceof \SimpleXMLElement) {
-            throw new \Exception(sprintf('Cannot parse the response: %s', $response));
+            throw new \InvalidArgumentException(sprintf('Cannot parse the response: %s', $response));
         }
 
         if (!isset($xml->result)) {
             $message = $xml->description ?: sprintf('Unknown error while parsing the response: %s.', $response);
-            throw new \Exception($message);
+            throw new \InvalidArgumentException($message);
         }
 
         return (string) $xml->result;

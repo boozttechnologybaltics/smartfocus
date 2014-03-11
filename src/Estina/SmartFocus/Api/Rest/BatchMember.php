@@ -3,11 +3,11 @@
 namespace Estina\SmartFocus\Api\Rest;
 
 /**
- * Data Mass Update REST API
+ * Data Mass Update (Batch Member) REST API
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class DataMassUpdate extends AbstractRestService
+class BatchMember extends AbstractRestService
 {
     /**
      * This method provides a session token when given valid credentials
