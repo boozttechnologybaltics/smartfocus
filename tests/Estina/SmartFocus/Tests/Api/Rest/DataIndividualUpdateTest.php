@@ -5,7 +5,6 @@ namespace Estina\SmartFocus\Tests;
 use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
 
-use Estina\SmartFocus\Api\Http\DummyClient;
 use Estina\SmartFocus\Api\Rest\DataIndividualUpdate;
 
 /**
@@ -15,6 +14,10 @@ use Estina\SmartFocus\Api\Rest\DataIndividualUpdate;
  */
 class DataIndividualUpdateTest extends PHPUnit_Framework_TestCase
 {
+    private $token = 'testtoken';
+    private $xml = '<xml>testxml</xml>';
+    private $email = 'test@example.com';
+
     /**
      * Tests openConnection
      */
@@ -25,7 +28,7 @@ class DataIndividualUpdateTest extends PHPUnit_Framework_TestCase
         $password = 'password';
         $key = 'key';
 
-        $service = $this->getService();
+        $service = $this->getService(false);
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
@@ -33,19 +36,282 @@ class DataIndividualUpdateTest extends PHPUnit_Framework_TestCase
 
     }
 
-    /**
-     * @return DataIndividualUpdate service
+    /*
+     * Tests closeConnection without opening it first
      */
-    private function getService()
+    public function testCloseConnectionWithoutOpenConnection()
     {
-        $client = $this->getMock('Estina\SmartFocus\Api\Http\CurlClient');
-        return new DataIndividualUpdate($client);
+        $this->setExpectedException('InvalidArgumentException');
+        $service = $this->getService(false);
+        $response = $service->closeConnection($this->token);
+    }
+
+    /**
+     * Tests closeConnection
+     */
+    public function testCloseConnection()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->closeConnection($this->token);
+    }
+
+    /**
+     * tests insertMemberByEmailAddress
+     */
+    public function testInsertMemberByEmailAddress()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->insertMemberByEmailAddress($this->token, $this->email);
+    }
+
+    /**
+     * tests insertMember
+     */
+    public function testInsertMember()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('post');
+        $response = $service->insertMember($this->token, $this->xml);
+    }
+
+    /**
+     * tests updateMember
+     */
+    public function testUpdateMember()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('post');
+        $response = $service->updateMember($this->token, $this->xml);
+    }
+
+    /**
+     * tests insertOrUpdateMember
+     */
+    public function testInsertOrUpdateMember()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('post');
+        $response = $service->insertOrUpdateMember($this->token, $this->xml);
+    }
+
+    /**
+     * tests updateMemberByEmailAddress
+     */
+    public function testUpdateMemberByEmailAddress()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->updateMemberByEmailAddress($this->token, $this->email, 'field', 'value');
+    }
+
+    /**
+     * tests getMemberJobStatus
+     */
+    public function testGetMemberJobStatus()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->getMemberJobStatus($this->token, 'jobId');
+    }
+
+    /**
+     * tests getMemberByEmail
+     */
+    public function testGetMemberByEmail()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->getMemberByEmail($this->token, $this->email);
+    }
+
+    /**
+     * tests getMemberByCellphone
+     */
+    public function testGetMemberByCellphone()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->getMemberByCellphone($this->token, '123456789');
+    }
+
+    /**
+     * tests getMemberById
+     */
+    public function testGetMemberById()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->getMemberById($this->token, '12345');
+    }
+
+    /**
+     * tests getMembersByPage
+     */
+    public function testGetMembersByPage()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->getMembersByPage($this->token, '1');
+    }
+
+    /**
+     * tests getMembersByCriteria
+     */
+    public function testGetMembersByCriteria()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('post');
+        $response = $service->getMembersByCriteria($this->token, $this->xml);
     }
 
 
     /**
-     * Return value protected/private property from object. Chaining could be
-     * used to configure mocked objects:
+     * tests getMemberTableColumnNames
+     */
+    public function testGetMemberTableColumnNames()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->getMemberTableColumnNames($this->token);
+    }
+
+    /**
+     * tests unsubscribeMemberByEmail
+     */
+    public function testUnsubscribeMemberByEmail()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->unsubscribeMemberByEmail($this->token, $this->email);
+    }
+
+    /**
+     * tests unsubscribeMemberByCellphone
+     */
+    public function testUnsubscribeMemberByCellphone()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->unsubscribeMemberByCellphone($this->token, '123456789');
+    }
+
+    /**
+     * tests unsubscribeMemberById
+     */
+    public function testUnsubscribeMemberById()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->unsubscribeMemberById($this->token, '12345');
+    }
+
+    /**
+     * tests unsubscribeMemberByValue
+     */
+    public function testUnsubscribeMemberByValue()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('post');
+        $response = $service->unsubscribeMemberByValue($this->token, $this->xml);
+    }
+
+
+    /**
+     * tests resubscribeMemberByEmail
+     */
+    public function testResubscribeMemberByEmail()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->resubscribeMemberByEmail($this->token, $this->email);
+    }
+
+    /**
+     * tests resubscribeMemberByCellphone
+     */
+    public function testResubscribeMemberByCellphone()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->resubscribeMemberByCellphone($this->token, '132456789');
+    }
+
+    /**
+     * tests resubscribeMemberById
+     */
+    public function testResubscribeMemberById()
+    {
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->once())
+               ->method('get');
+        $response = $service->resubscribeMemberById($this->token, '13245');
+    }
+
+
+    /**
+     * @return DataIndividualUpdate
+     */
+    private function getService($openConnection = true)
+    {
+        $client = $this->getMock('Estina\SmartFocus\Api\Http\CurlClient');
+        $service = new DataIndividualUpdate($client);
+
+        if ($openConnection) {
+            $server = 'localhost';
+            $login = 'login';
+            $password = 'password';
+            $key = 'key';
+
+            $service->openConnection($server, $login, $password, $key);
+        }
+
+        return $service;
+    }
+
+
+    /**
+     * Return value protected/private property from object.
      *
      * @param object $object Target object
      * @param string $name   Name of hidden property

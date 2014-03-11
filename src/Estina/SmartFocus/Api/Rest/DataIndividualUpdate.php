@@ -293,11 +293,10 @@ class DataIndividualUpdate extends AbstractRestService
      * available in the Member table
      *
      * @param string $token Token
-     * @param string $xml   XML input body
      *
      * @return mixed - XML string or FALSE on failure
      */
-    public function getMemberTableColumnNames($token, $xml)
+    public function getMemberTableColumnNames($token)
     {
         $response = $this->client->get(
             $this->getUrl("member/descMemberTable/$token")

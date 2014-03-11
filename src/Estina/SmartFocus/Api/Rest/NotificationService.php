@@ -45,7 +45,7 @@ class NotificationService extends AbstractRestService
         );
 
         $response = $this->client->get(
-            $this->getUrl("NMSREST?" . http_build_query($data))
+            $this->getUrl("NMSREST?" . http_build_query($params))
         );
 
         return $response;
