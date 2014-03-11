@@ -60,7 +60,6 @@ if ($response) {
     $token = $parser->getResult($response);
     if ($token) {
         $insertResponse = $api->insertMemberByEmailAddress($token, 'email@example.com');
-        $jobId = $parser->getResult($insertResponse);
         $closeResponse = $api->closeConnection($token);
     }
 }
