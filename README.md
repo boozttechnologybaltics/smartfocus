@@ -8,14 +8,15 @@ This library provides access to SmartFocus (previously known as EmailVision) [Ca
 (http://developer.smartfocus.com/io-docs). It was designed with flexibility in mind, with fully decoupled components, so it would be easy for developer
 to inject and use his own components where appropriate.
 
+
 ## Requirements
 
 - PHP 5.x+
 - curl
 - libxml
 
-## Install
 
+## Install
 
 Add the following to composer.json:
 
@@ -36,34 +37,51 @@ update as you normally do:
 
     php composer.phar update
 
+
 ## Examples
 
-### insertMemberByEmailAddress
+This library can be used in two ways:
+
+- Low level - when you need flexibility and access "under the hood"
+- High level - when you need a quick and simple access (to be done)
+
+### Low Level API Examples
+
+#### insertMemberByEmailAddress
 
 ```php
+// cURL client for communication with API
 use Estina\SmartFocus\Api\Http\CurlClient;
+// Member REST API class
 use Estina\SmartFocus\Api\Rest\Member;
+// helper for XML parsing (optional)
 use Estina\SmartFocus\Api\Util\RestResponseParser;
 
-$config = array(
-    'server'    => 'server hostname',
-    'login'     => 'your login name',
-    'password'  => 'your password',
-    'key'       => 'your API key',
+// initialize object, injecting the cURL client
+$api = new Member(new CurlClient());
+
+// open the connection, XML is returned, containing token or error description
+$xmlResponse = $api->openConnection(
+    'server hostname',
+    'your login name',
+    'your password',
+    'your API key'
 );
 
-$api = new Member(new CurlClient());
-$parser = new ResponseParser();
+if ($xmlResponse) {
+    // extract token from XML
+    $parser = new ResponseParser();
+    $token = $parser->getResult($xmlResponse);
 
-$response = $api->openConnection($config['server'], $config['login'], $config['password'], $config['key']);
-if ($response) {
-    $token = $parser->getResult($response);
     if ($token) {
+        // call the API method
         $insertResponse = $api->insertMemberByEmailAddress($token, 'email@example.com');
-        $closeResponse = $api->closeConnection($token);
+        // close the connection
+        $api->closeConnection($token);
     }
 }
 ```
+
 
 ## Supported APIs and Methods
 
@@ -98,4 +116,11 @@ if ($response) {
 ### Notification REST
 
 - send($email, $encrypt, $notificationId, $random, $dyn, $senddate, $uidkey, $stype)
+
+
+## More information
+
+More documentation is available in the "doc" folder and in the source code.
+
+
 
