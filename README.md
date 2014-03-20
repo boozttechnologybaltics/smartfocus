@@ -91,7 +91,7 @@ as it implements a very simple Api\Http\ClientInterface.
 
 ##### Notification REST
 
-- send($email, $encrypt, $notificationId, $random, $dyn, $senddate, $uidkey, $stype)
+- [send($email, $encrypt, $notificationId, $random, $dyn, $senddate, $uidkey, $stype)] (#notificationsendemail-encrypt-notificationid-random-dyn-senddate-uidkey-stype)
 
 ### Low Level API Examples
 
@@ -122,8 +122,13 @@ if ($xmlResponse) {
     $token = $parser->getResult($xmlResponse);
 
     if ($token) {
+
         // call the API method and fetch the response
-        $insertResponse = $api->insertMemberByEmailAddress($token, 'email@example.com');
+        $insertResponse = $api->insertMemberByEmailAddress(
+            $token,
+            'email@example.com'
+        );
+
         // close the connection
         $api->closeConnection($token);
     }
@@ -216,14 +221,17 @@ use Estina\SmartFocus\Api\Rest\Notification;
 $api = new Notification(new CurlClient());
 
 $response = $api->send(
-    'email@example.com',
-    'The encrypt value provided in the interface',
-    'he ID of the Template',
-    'The random value provided for the template',
-    array('firstname' => 'John', 'lastname' => 'Smith'), // pass dynamic parameters as an array
-    'YYYY-MM-DD HH:MM:SS' // optional
-    'The key you wish to update, normally its email' // optional
-    'The type of synchronization that should be carried out' // optional
+    'email@example.com',       // Recipient
+    'abcdefg',                 // Encrypt value provided in the interface
+    '132456',                  // ID of the Template
+    '123456789',               // Random value provided for the template
+    array(                     // Dynamic parameters as an array
+        'firstname' => 'John',
+        'lastname' => 'Smith'
+    ),
+    'YYYY-MM-DD HH:MM:SS' // optional, The time you wish to send
+    'email'               // optional, the key you wish to update, normally its email
+    'NOTHING'             // optional, The type of synchronization
 );
 ```
 
