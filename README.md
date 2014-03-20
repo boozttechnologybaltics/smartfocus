@@ -68,7 +68,7 @@ as it implements a very simple Api\Http\ClientInterface.
 
 - openConnection($server, $login, $password, $key)
 - closeConnection($token)
-- insertMemberByEmailAddress($token, $email)
+- [insertMemberByEmailAddress($token, $email)] (#memberinsertmemberbyemailaddresstoken-email)
 - insertMember($token, $xml)
 - updateMember($token, $xml)
 - insertOrUpdateMember($token, $xml)
