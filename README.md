@@ -204,6 +204,30 @@ if ($xmlResponse) {
 }
 ```
 
+#### Notification::send($email, $encrypt, $notificationId, $random, $dyn, $senddate, $uidkey, $stype)
+
+```php
+// cURL client for communication with API
+use Estina\SmartFocus\Api\Http\CurlClient;
+// Member REST API class
+use Estina\SmartFocus\Api\Rest\Notification;
+
+// initialize object, injecting the cURL client
+$api = new Notification(new CurlClient());
+
+$response = $api->send(
+    'email@example.com',
+    'The encrypt value provided in the interface',
+    'he ID of the Template',
+    'The random value provided for the template',
+    array('firstname' => 'John', 'lastname' => 'Smith'), // pass dynamic parameters as an array
+    'YYYY-MM-DD HH:MM:SS' // optional
+    'The key you wish to update, normally its email' // optional
+    'The type of synchronization that should be carried out' // optional
+);
+```
+
+
 ## Troubleshooting
 
 If you get the response with the following status codes:

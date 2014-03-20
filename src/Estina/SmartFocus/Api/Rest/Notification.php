@@ -27,10 +27,15 @@ class Notification extends AbstractRestService
         $notificationId,
         $random,
         $dyn,
-        $senddate = '2008-12-12T00:00:0',
+        $senddate = '2008-12-12 00:00:00',
         $uidkey = '',
         $stype = 'NOTHING'
     ) {
+
+        if (is_array($dyn)) {
+            $dyn = http_build_query($dyn, '', '|');
+            $dyn = str_replace('=', ':', $dyn);
+        }
 
         $this->setUrlPrefix('http://api.notificationmessaging.com');
 
