@@ -71,7 +71,7 @@ as it implements a very simple Api\Http\ClientInterface.
 - [insertMemberByEmailAddress($token, $email)] (#memberinsertmemberbyemailaddresstoken-email)
 - insertMember($token, $xml)
 - updateMember($token, $xml)
-- insertOrUpdateMember($token, $xml)
+- [insertOrUpdateMember($token, $xml)] (#memberinsertorupdatemembertoken-xml)
 - updateMemberByEmailAddress($token, $email, $field, $value)
 - getMemberJobStatus($token, $jobId)
 - getMemberByEmail($token, $email)
@@ -118,17 +118,94 @@ $xmlResponse = $api->openConnection(
 
 if ($xmlResponse) {
     // extract token from XML
-    $parser = new ResponseParser();
+    $parser = new RestResponseParser();
     $token = $parser->getResult($xmlResponse);
 
     if ($token) {
-        // call the API method
+        // call the API method and fetch the response
         $insertResponse = $api->insertMemberByEmailAddress($token, 'email@example.com');
         // close the connection
         $api->closeConnection($token);
     }
 }
 ```
+
+#### Member::insertOrUpdateMember($token, $xml)
+
+```php
+// cURL client for communication with API
+use Estina\SmartFocus\Api\Http\CurlClient;
+// Member REST API class
+use Estina\SmartFocus\Api\Rest\Member;
+// helper for XML parsing (optional)
+use Estina\SmartFocus\Api\Util\RestResponseParser;
+
+// initialize object, injecting the cURL client
+$api = new Member(new CurlClient());
+
+// open the connection, XML is returned, containing token or error description
+$xmlResponse = $api->openConnection(
+    'server hostname',
+    'your login name',
+    'your password',
+    'your API key'
+);
+
+if ($xmlResponse) {
+    // extract token from XML
+    $parser = new RestResponseParser();
+    $token = $parser->getResult($xmlResponse);
+
+    if ($token) {
+
+        /*
+         * Let's build request's XML body with data
+         *
+         * <memberUID>:
+         *      Multiple sets of criteria can be combined to identify the member, e.g.
+         *      EMAIL:johnsmith@smartfocus.com|LASTNAME:Smith
+         *
+         * <dynContent>:
+         *      envelope containing the list of fields to be updated and their values
+         *
+         * <entry>:
+         *      The entry envelope containing the field to update and its value.
+         *
+         * <key>:
+         *      The field that will be updated.
+         *
+         * <value>:
+         *      The value with which to update the field.
+         */
+        $xml =
+            '<?xml version="1.0" encoding="utf-8"?>
+             <synchroMember>
+                <memberUID>
+                    EMAIL:%s
+                </memberUID>
+                <dynContent>
+                    <entry>
+                        <key>FIRSTNAME</key>
+                        <value>%s</value>
+                    </entry>
+                    <entry>
+                        <key>LASTNAME</key>
+                        <value>%s</value>
+                    </entry>
+                </dynContent>
+            </synchroMember>';
+
+        // inject values into XML
+        $xml = sprintf($xml, 'email@example.com', 'John', 'Smith');
+
+        // call the API method and fetch the response
+        $insertResponse = $api->insertOrUpdateMember($token, $xml);
+        // close the connection
+        $api->closeConnection($token);
+    }
+}
+```
+
 
 ## More information
 
