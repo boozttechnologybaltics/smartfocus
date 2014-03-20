@@ -180,9 +180,7 @@ if ($xmlResponse) {
         $xml =
             '<?xml version="1.0" encoding="utf-8"?>
              <synchroMember>
-                <memberUID>
-                    EMAIL:%s
-                </memberUID>
+                <memberUID>EMAIL:%s</memberUID>
                 <dynContent>
                     <entry>
                         <key>FIRSTNAME</key>
@@ -206,10 +204,28 @@ if ($xmlResponse) {
 }
 ```
 
+## Troubleshooting
+
+If you get the response with the following status codes:
+
+- UPDATE_MEMBER_FAILED
+- ISTUPD_MEMBER_FAILED
+
+Check the following:
+
+- XML input body is formatted correctly
+- There are no spaces, newlines or other invalid symbols inside the <memberUID>
+  tag, it should look like:
+
+```xml
+<memberUID>EMAIL:email@example.com</memberUID>
+```
 
 ## More information
 
-More documentation is available in the "doc" folder and in the source code.
+SmartFocus documentation is available in the "doc" folder. Also, more detailed
+descriptions of all functions and their parameters are available in the source
+code.
 
 
 
