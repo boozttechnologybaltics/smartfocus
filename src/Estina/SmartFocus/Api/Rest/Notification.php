@@ -32,11 +32,6 @@ class Notification extends AbstractRestService
         $stype = 'NOTHING'
     ) {
 
-        if (is_array($dyn)) {
-            $dyn = http_build_query($dyn, '', '|');
-            $dyn = str_replace('=', ':', $dyn);
-        }
-
         $this->setUrlPrefix('http://api.notificationmessaging.com');
 
         $params = array(
@@ -45,12 +40,16 @@ class Notification extends AbstractRestService
             'email' => $email,
             'senddate' => $senddate,
             'uidkey' => $uidkey,
-            'stype' => $stype,
-            'dyn' => $dyn,
+            'stype' => $stype
         );
+        
+        if (is_array($dyn)) {
+            $dyn = http_build_query($dyn, '', '|');
+            $dyn = str_replace('=', ':', $dyn);
+        }
 
         $response = $this->client->get(
-            $this->getUrl("NMSREST?" . http_build_query($params))
+            $this->getUrl("NMSREST?" . http_build_query($params) . "&dyn=" . $dyn)
         );
 
         return $response;
