@@ -42,11 +42,6 @@ class Notification extends AbstractRestService
             'uidkey' => $uidkey,
             'stype' => $stype
         );
-        
-        if (is_array($dyn)) {
-            $dyn = http_build_query($dyn, '', '|');
-            $dyn = str_replace('=', ':', $dyn);
-        }
 
         $response = $this->client->get(
             $this->getUrl("NMSREST?" . http_build_query($params) . "&dyn=" . $dyn)
