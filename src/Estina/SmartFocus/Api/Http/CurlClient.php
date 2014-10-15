@@ -25,7 +25,23 @@ class CurlClient implements ClientInterface
             throw new \Exception('cURL functions are not available, check if libcurl is installed.');
         }
 
+        $this->setTimeout($timeout);
+    }
+
+    /**
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
         $this->timeout = $timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
     }
 
     /**
@@ -67,6 +83,29 @@ class CurlClient implements ClientInterface
     }
 
     /**
+     * Performs PUT request
+     *
+     * @param string $url    URL
+     * @param array  $header Header
+     * @param string $body   Body
+     *
+     * @return mixed - XML string or FALSE in failure
+     */
+    public function put($url, $header, $body)
+    {
+        $ch = $this->curlInit($url);
+
+        $header[] = 'Accept: application/xml';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        $response = curl_exec($ch);
+
+        return $response;
+    }
+
+    /**
      * Initializes cURL session and sets common options
      *
      * @param string $url
@@ -83,7 +122,7 @@ class CurlClient implements ClientInterface
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $this->getTimeout());
         curl_setopt($ch, CURLOPT_HEADER, 0);
 
         return $ch;

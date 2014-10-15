@@ -9,6 +9,7 @@ namespace Estina\SmartFocus\Api\Rest;
  */
 class Notification extends AbstractRestService
 {
+
     /**
      * @param string $email          The email address to which you wish to send the transactional message
      * @param string $encrypt        The encrypt value provided in the interface

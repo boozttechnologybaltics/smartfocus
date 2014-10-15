@@ -10,6 +10,14 @@ namespace Estina\SmartFocus\Api\Rest;
 class Member extends AbstractRestService
 {
     /**
+     * @param string $server Web service host
+     */
+    public function setServer($server)
+    {
+        $this->setUrlPrefix(sprintf('https://%s/apimember/services/rest', $server));
+    }
+
+    /**
      * This method provides a session token when given valid credentials
      *
      * The token is valid for 60 minutes. To avoid problems with expired
@@ -25,7 +33,7 @@ class Member extends AbstractRestService
      */
     public function openConnection($server, $login, $password, $key)
     {
-        $this->setUrlPrefix(sprintf('https://%s/apimember/services/rest', $server));
+        $this->setServer($server);
 
         $response = $this->client->get(
             $this->getUrl("connect/open/$login/$password/$key")

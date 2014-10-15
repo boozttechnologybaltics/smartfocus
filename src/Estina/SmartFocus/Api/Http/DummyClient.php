@@ -36,4 +36,15 @@ class DummyClient implements ClientInterface
     {
         return $xml;
     }
+
+    /**
+     * Performs PUT request
+     *
+     * @param string $url    URL
+     * @param array  $header Header
+     * @param string $body   Body
+     *
+     * @return mixed - XML string or FALSE in failure
+     */
+    public function put($url, $header, $body);
 }

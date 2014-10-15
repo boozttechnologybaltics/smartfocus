@@ -27,4 +27,15 @@ interface ClientInterface
      * @return mixed - XML string or FALSE on failure
      */
     public function post($url, $xml);
+
+    /**
+     * Performs PUT request
+     *
+     * @param string $url    URL
+     * @param array  $header Header
+     * @param string $body   Body
+     *
+     * @return mixed - XML string or FALSE in failure
+     */
+    public function put($url, $header, $body);
 }
