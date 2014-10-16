@@ -59,32 +59,6 @@ class BatchMember extends AbstractRestService
     }
 
     /**
-     * Upload a File and Insert the Members
-     *
-     * This method uploads a file containing members and inserts them into the member table.
-     *
-     * @param string $token Token
-     * @param string $xml   XML body
-     *
-     * @return mixed - XML string or FALSE on failure
-     */
-    public function insert($token, $xml)
-    {
-        $seed = $this->extractSeed($xml);
-        if (empty($seed)) {
-            throw new \InvalidArgumentException('Cannot find boundary seed, invalid XML');
-        }
-
-        $response = $this->client->put(
-            $this->getUrl("batchmemberservice/$token/batchmember/insertUpload"),
-            array("Content-Type: multipart/form-data; boundary=" . $seed),
-            $xml
-        );
-
-        return $response;
-    }
-
-    /**
      * Builds XML string for insert function
      *
      * @param array  $filepath   Full path to the CSV file
@@ -95,7 +69,7 @@ class BatchMember extends AbstractRestService
      *
      * @return string
      */
-    public function buildInsertXml($filepath, $dateformat = 'dd/MM/yyyy', $dedup = true)
+    public function buildInsertXml($filepath, $dateformat = 'yyyy-MM-dd', $dedup = true)
     {
         if (!is_readable($filepath)) {
             throw new \InvalidArgumentException(sprintf('File %s is not readable', $filepath));
@@ -133,6 +107,120 @@ class BatchMember extends AbstractRestService
         $xml .= "\r\n--" . $seed . "--\r\n";
 
         return $xml;
+    }
+
+    /**
+     * Upload a File and Insert the Members
+     *
+     * This method uploads a file containing members and inserts them into the member table.
+     *
+     * @param string $token Token
+     * @param string $xml   XML body
+     *
+     * @return mixed - XML string or FALSE on failure
+     */
+    public function insert($token, $xml)
+    {
+        $seed = $this->extractSeed($xml);
+        if (empty($seed)) {
+            throw new \InvalidArgumentException('Cannot find boundary seed, invalid XML');
+        }
+
+        $response = $this->client->put(
+            $this->getUrl("batchmemberservice/$token/batchmember/insertUpload"),
+            array("Content-Type: multipart/form-data; boundary=" . $seed),
+            $xml
+        );
+
+        return $response;
+    }
+
+    /**
+     * Builds XML string for update function
+     *
+     * @param array  $filepath   Full path to the CSV file
+     * @param string $dateformat Date format
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
+    public function buildUpdateXml($filepath, $dateformat = 'yyyy-MM-dd')
+    {
+        if (!is_readable($filepath)) {
+            throw new \InvalidArgumentException(sprintf('File %s is not readable', $filepath));
+        }
+
+        //Boundary seed
+        $seed = $this->getBoundarySeed();
+        $delimiter = $this->detectDelimiter($filepath);
+
+        $xml = "--" . $seed . "\r\n";
+        $xml .= "Content-Type: text/xml\r\n";
+        $xml .= "Content-Disposition: form-data; name='mergeUpload'\r\n\r\n";
+
+        $xml .= "<?xml version='1.0' encoding='UTF-8'?>\r\n";
+        $xml .= "<mergeUpload>\r\n";
+        $xml .= "<fileName>" . $this->getFilename($filepath) . "</fileName>\r\n";
+        $xml .= "<fileEncoding>UTF-8</fileEncoding>\r\n";
+        $xml .= "<separator>" . $delimiter . "</separator>\r\n";
+        $xml .= "<dateFormat>" . $dateformat . "</dateFormat>\r\n";
+        $xml .= "<criteria>LOWER(EMAIL)</criteria>\r\n";
+        $xml .= "<mapping>\r\n";
+
+        $fields = $this->getFirstLine($filepath);
+        $fields = trim($fields);
+        $fields = explode($delimiter, $fields);
+        foreach ($fields as $col => $field) {
+            $xml .= sprintf(
+                "<column><colNum>%d</colNum><fieldName>%s</fieldName>%s</column>\r\n",
+                ($col+1),
+                $field,
+                ('EMAIL' === $field) ? '' : '<toReplace>true</toReplace>'
+            );
+        }
+
+        $xml .= "</mapping>\r\n";
+        $xml .= "</mergeUpload>\r\n";
+        $xml .= "--" . $seed . "\r\n";
+        $xml .= "Content-Type: application/octet-stream\r\n";
+        $xml .= "Content-Disposition: form-data; name='inputStream'; filename='" . $this->getFilename($filepath) . "'\r\n";
+        $xml .= "Content-Transfer-Encoding: base64\r\n\r\n";
+
+        // we need to drop the first row, as it's only used for mapping
+        $content = file_get_contents($filepath);
+        $content = substr($content, (strpos($content, "\n") + 1));
+
+        $xml .= base64_encode($content);
+        $xml .= "\r\n--" . $seed . "--\r\n";
+
+        return $xml;
+    }
+
+    /**
+     * Upload a File and Merge the Members with the Existing Members
+     *
+     * This method uploads a file containing members and merges them with those in the member table.
+     *
+     * @param string $token Token
+     * @param string $xml   XML body
+     *
+     * @return mixed - XML string or FALSE on failure
+     */
+    public function update($token, $xml)
+    {
+        $seed = $this->extractSeed($xml);
+        if (empty($seed)) {
+            throw new \InvalidArgumentException('Cannot find boundary seed, invalid XML');
+        }
+
+        $response = $this->client->put(
+            $this->getUrl("batchmemberservice/$token/batchmember/mergeUpload"),
+            array("Content-Type: multipart/form-data; boundary=" . $seed),
+            $xml
+        );
+
+        return $response;
     }
 
     /**
