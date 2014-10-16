@@ -63,15 +63,39 @@ class BatchMember extends AbstractRestService
      *
      * This method uploads a file containing members and inserts them into the member table.
      *
-     * @param string $token      Token
-     * @param array  $filepath   Full path to the CSV file
-     * @param string $dateformat Date format
-     *
-     * @throws \InvalidArgumentException
+     * @param string $token Token
+     * @param string $xml   XML body
      *
      * @return mixed - XML string or FALSE on failure
      */
-    public function insert($token, $filepath, $dateformat = 'dd/MM/yyyy')
+    public function insert($token, $xml)
+    {
+        $seed = $this->extractSeed($xml);
+        if (empty($seed)) {
+            throw new \InvalidArgumentException('Cannot find boundary seed, invalid XML');
+        }
+
+        $response = $this->client->put(
+            $this->getUrl("batchmemberservice/$token/batchmember/insertUpload"),
+            array("Content-Type: multipart/form-data; boundary=" . $seed),
+            $xml
+        );
+
+        return $response;
+    }
+
+    /**
+     * Builds XML string for insert function
+     *
+     * @param array  $filepath   Full path to the CSV file
+     * @param string $dateformat Date format
+     * @param bool   $dedup      Skip duplicates (default: true)
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
+    public function buildInsertXml($filepath, $dateformat = 'dd/MM/yyyy', $dedup = true)
     {
         if (!is_readable($filepath)) {
             throw new \InvalidArgumentException(sprintf('File %s is not readable', $filepath));
@@ -80,33 +104,35 @@ class BatchMember extends AbstractRestService
         //Boundary seed
         $seed = $this->getBoundarySeed();
 
-        $body = "--" . $seed . "\r\n";
-        $body .= "Content-Disposition: form-data; name='insertUpload';\r\n";
-        $body .= "Content-Type: text/xml\r\n\r\n";
+        $xml = "--" . $seed . "\r\n";
+        $xml .= "Content-Type: text/xml\r\n";
+        $xml .= "Content-Disposition: form-data; name='insertUpload'\r\n\r\n";
 
-        $body .= "<?xml version='1.0' encoding='UTF-8'?>\r\n";
-        $body .= "<insertUpload>\r\n";
-        $body .= "<fileName>" . $this->getFilename($filepath) . "</fileName>\r\n";
-        $body .= "<fileEncoding>UTF-8</fileEncoding>\r\n";
-        $body .= "<separator>" . $this->detectDelimiter($filepath) . "</separator>\r\n";
-        $body .= "<dateFormat>" . $dateformat . "</dateFormat>\r\n";
-        $body .= "<autoMapping>true</autoMapping>\r\n";
-        $body .= "</insertUpload>\r\n";
-        $body .= "--" . $seed . "\r\n";
-        $body .= "Content-Disposition: form-data; name='inputStream';\r\n";
-        $body .= "filename='" . $this->getFilename($filepath) . "'\r\n";
-        $body .= "Content-Type: application/octet-stream\r\n";
-        $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
-        $body .= base64_encode(file_get_contents($filepath));
-        $body .= "\r\n--" . $seed . "--\r\n";
+        $xml .= "<?xml version='1.0' encoding='UTF-8'?>\r\n";
+        $xml .= "<insertUpload>\r\n";
+        $xml .= "<fileName>" . $this->getFilename($filepath) . "</fileName>\r\n";
+        $xml .= "<fileEncoding>UTF-8</fileEncoding>\r\n";
+        $xml .= "<separator>" . $this->detectDelimiter($filepath) . "</separator>\r\n";
+        $xml .= "<dateFormat>" . $dateformat . "</dateFormat>\r\n";
+        $xml .= "<autoMapping>true</autoMapping>\r\n";
 
-        $response = $this->client->put(
-            $this->getUrl("batchmemberservice/$token/batchmember/insertUpload"),
-            array("Content-Type: multipart/form-data; boundary=" . $seed),
-            $body
-        );
+        if ($dedup) {
+            $xml .= "<dedup>\r\n";
+            $xml .= "<criteria>LOWER(EMAIL)</criteria>\r\n";
+            $xml .= "<order>first</order>\r\n";
+            $xml .= "<skipUnsubAndHBQ>true</skipUnsubAndHBQ>\r\n";
+            $xml .= "</dedup>\r\n";
+        }
 
-        return $response;
+        $xml .= "</insertUpload>\r\n";
+        $xml .= "--" . $seed . "\r\n";
+        $xml .= "Content-Type: application/octet-stream\r\n";
+        $xml .= "Content-Disposition: form-data; name='inputStream'; filename='" . $this->getFilename($filepath) . "'\r\n";
+        $xml .= "Content-Transfer-Encoding: base64\r\n\r\n";
+        $xml .= base64_encode(file_get_contents($filepath));
+        $xml .= "\r\n--" . $seed . "--\r\n";
+
+        return $xml;
     }
 
     /**
@@ -117,6 +143,18 @@ class BatchMember extends AbstractRestService
     private function getBoundarySeed()
     {
         return md5(mt_rand() . ' ' . microtime(true));
+    }
+
+    /**
+     * @param string $xml
+     *
+     * @return string
+     */
+    private function extractSeed($xml)
+    {
+        $seed = substr($xml, 2, (strpos($xml, "\r\n")));
+
+        return trim($seed);
     }
 
     /**
