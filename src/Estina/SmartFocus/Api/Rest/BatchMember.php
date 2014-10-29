@@ -77,6 +77,7 @@ class BatchMember extends AbstractRestService
 
         //Boundary seed
         $seed = $this->getBoundarySeed();
+        $delimiter = $this->detectDelimiter($filepath);
 
         $xml = "--" . $seed . "\r\n";
         $xml .= "Content-Type: text/xml\r\n";
@@ -86,7 +87,7 @@ class BatchMember extends AbstractRestService
         $xml .= "<insertUpload>\r\n";
         $xml .= "<fileName>" . $this->getFilename($filepath) . "</fileName>\r\n";
         $xml .= "<fileEncoding>UTF-8</fileEncoding>\r\n";
-        $xml .= "<separator>" . $this->detectDelimiter($filepath) . "</separator>\r\n";
+        $xml .= "<separator>" . ("\t" == $delimiter) ? 'tab' : $delimiter . "</separator>\r\n";
         $xml .= "<dateFormat>" . $dateformat . "</dateFormat>\r\n";
         $xml .= "<autoMapping>true</autoMapping>\r\n";
 
@@ -163,7 +164,7 @@ class BatchMember extends AbstractRestService
         $xml .= "<mergeUpload>\r\n";
         $xml .= "<fileName>" . $this->getFilename($filepath) . "</fileName>\r\n";
         $xml .= "<fileEncoding>UTF-8</fileEncoding>\r\n";
-        $xml .= "<separator>" . $delimiter . "</separator>\r\n";
+        $xml .= "<separator>" . (("\t" == $delimiter) ? 'tab' : $delimiter) . "</separator>\r\n";
         $xml .= "<dateFormat>" . $dateformat . "</dateFormat>\r\n";
         $xml .= "<criteria>LOWER(EMAIL)</criteria>\r\n";
         $xml .= "<mapping>\r\n";
@@ -273,10 +274,6 @@ class BatchMember extends AbstractRestService
                 $count = $delimiterCount;
                 $result = $delimiter;
             }
-        }
-
-        if ("\t" == $result) {
-            $result = 'tab';
         }
 
         return $result;
