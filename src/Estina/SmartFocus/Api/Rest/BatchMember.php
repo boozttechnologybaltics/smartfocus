@@ -35,6 +35,8 @@ class BatchMember extends AbstractRestService
     {
         $this->setServer($server);
 
+        $password = urlencode($password);
+
         $response = $this->client->get(
             $this->getUrl("connect/open/$login/$password/$key")
         );
