@@ -23,7 +23,7 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $encrypt = 'The encrypt value';
         $notificationId = 'template ID';
         $random = 'The random value';
-        $dyn = 'Dynamic personalization content';
+        $dyn = 'field1:value1|field2:value2';
 
         $service = $this->getService();
         $client = $this->getHiddenProperty($service, 'client');
