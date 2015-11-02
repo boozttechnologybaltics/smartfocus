@@ -39,7 +39,7 @@ abstract class AbstractRestService
      *
      * @param string $url URL suffix
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return string
      */

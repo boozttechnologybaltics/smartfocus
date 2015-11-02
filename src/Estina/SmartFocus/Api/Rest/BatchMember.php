@@ -227,6 +227,102 @@ class BatchMember extends AbstractRestService
     }
 
     /**
+     * This method retrieves the last 20 uploads for the SmartFocus account and their statuses.
+     *
+     * @param string $token
+     *
+     * @return mixed - XML string or FALSE on failure
+     */
+    public function getLastUpload($token)
+    {
+        return $this->client->get(
+            $this->getUrl("batchmemberservice/$token/batchmember/getLastUpload")
+        );
+    }
+
+    /**
+     * This method retrieves the status of a file upload
+     *
+     * @param string $token
+     * @param int    $uploadId
+     *
+     * @return mixed - XML string or FALSE on failure
+     */
+    public function getUploadStatus($token, $uploadId)
+    {
+        return $this->client->get(
+            $this->getUrl("batchmemberservice/$token/batchmember/{uploadId}/getUploadStatus")
+        );
+    }
+
+    /**
+     * This method retrieves a list of uploads and their details.
+     *
+     * @param string $token    Token
+     * @param int    $page     Page number
+     * @param int    $pageSize Page size, optional, default: 1000
+     * @param string $sort     Sort column, optional
+     * @param string $status   Search by status, optional
+     * @param string $source   Search by source (API_BATCH_MEMBER or CCMD), optional
+     *
+     * @return mixed
+     */
+    public function getUploads($token, $page, $pageSize = 1000, $sort = null, $status = null, $source = null)
+    {
+        $pageSize = min($pageSize, 1000);
+        $pageSize = max($pageSize, 1);
+
+        $url = $this->getUrl("batchmemberservice/$token/uploads/$page?pageSize=$pageSize&sort={column}:&search=status:{status}|source:{source}");
+
+        if (null !== $sort) {
+            $url .= '&sort=' . $sort . ':';
+        }
+
+        if (null !== $status || null !== $source) {
+            $url .= '&search=';
+            if (null !== $status) {
+                $url .= 'status:' . $status . '|';
+            }
+
+            if (null !== $source) {
+                $url .= 'source:' . $source;
+            }
+        }
+
+        return $this->client->get($url);
+    }
+
+    /**
+     * This method retrieves the log file associated with an upload.
+     *
+     * @param string $token
+     * @param int    $uploadId
+     *
+     * @return mixed - XML string or FALSE on failure
+     */
+    public function getLogFile($token, $uploadId)
+    {
+        return $this->client->get(
+            $this->getUrl("batchmemberservice/$token/batchmember/{uploadId}/getLogFile")
+        );
+    }
+
+    /**
+     * This method retrieves the lines of an uploaded file that could not be uploaded due to errors.
+     *
+     * @param string $token
+     * @param int    $uploadId
+     *
+     * @return mixed - XML string or FALSE on failure
+     */
+    public function getBadFile($token, $uploadId)
+    {
+        return $this->client->get(
+            $this->getUrl("batchmemberservice/$token/batchmember/{uploadId}/getBadFile")
+        );
+    }
+
+    /**
      * Return boundary seed
      *
      * @return string
