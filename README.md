@@ -20,40 +20,24 @@ to inject and use his own components where appropriate.
 
 Add the following to composer.json:
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:Estina/smartfocus.git"
-        }
-    ]
-
-followed by:
-
     "require": {
         "estina/smartfocus": "dev-master"
     }
 
-update as you normally do:
+install as you normally do:
 
-    php composer.phar update
+    php composer.phar install
 
 
-## Examples
+### Usage
 
-This library can be used in two ways:
-
-- [Low level] (#low-level-api) - when you need flexibility and access "under the hood"
-- High level - when you need a quick and simple access (not implemented yet)
-
-### Low Level API
-
-Interacting with all low level API functionality can be trimmed down to these basic steps:
+Interacting with API can be trimmed down to these basic steps:
 
 - open the connection and extract security token from the XML response
 - call the API method(s) using token and other required parameters
 - close the connection
 
-Please, check the [examples] (#low-level-api-examples) below.
+Please, check the [examples] (#api-examples) below.
 
 HTTP transport to the actual REST interface is implemented in
 Api\Http\CurlClient class. It's possible to use different class object as long
@@ -62,6 +46,7 @@ as it implements a very simple Api\Http\ClientInterface.
 #### Supported APIs and Methods
 
 - [Member REST] (#member-rest) - individual subscription management
+- [Batch Member REST] (#batch-member-rest) - batch subscription management
 - [Notification REST] (#notification-rest) - notification (email sending) service
 
 ##### Member REST
@@ -88,12 +73,26 @@ as it implements a very simple Api\Http\ClientInterface.
 - resubscribeMemberByCellphone($token, $cellphone)
 - resubscribeMemberById($token, $memberId)
 
+##### Batch Member REST
+
+- openConnection($server, $login, $password, $key)
+- closeConnection($token)
+- buildInsertXml($filepath, $dateformat = 'yyyy-MM-dd', $dedup = true)
+- insert($token, $xml)
+- buildUpdateXml($filepath, $dateformat = 'yyyy-MM-dd')
+- update($token, $xml)
+- getLastUpload($token)
+- getUploadStatus($token, $uploadId)
+- getUploads($token, $page, $pageSize = 1000, $sort = null, $status = null, $source = null)
+- getLogFile($token, $uploadId)
+- getBadFile($token, $uploadId)
+
 
 ##### Notification REST
 
 - [send($email, $encrypt, $notificationId, $random, $dyn, $senddate, $uidkey, $stype)] (#notificationsendemail-encrypt-notificationid-random-dyn-senddate-uidkey-stype)
 
-### Low Level API Examples
+### API Examples
 
 #### Member::insertMemberByEmailAddress($token, $email)
 

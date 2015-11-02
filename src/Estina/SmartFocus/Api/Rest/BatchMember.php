@@ -251,7 +251,7 @@ class BatchMember extends AbstractRestService
     public function getUploadStatus($token, $uploadId)
     {
         return $this->client->get(
-            $this->getUrl("batchmemberservice/$token/batchmember/{uploadId}/getUploadStatus")
+            $this->getUrl("batchmemberservice/$token/batchmember/$uploadId/getUploadStatus")
         );
     }
 
@@ -272,7 +272,7 @@ class BatchMember extends AbstractRestService
         $pageSize = min($pageSize, 1000);
         $pageSize = max($pageSize, 1);
 
-        $url = $this->getUrl("batchmemberservice/$token/uploads/$page?pageSize=$pageSize&sort={column}:&search=status:{status}|source:{source}");
+        $url = $this->getUrl("batchmemberservice/$token/uploads/$page?pageSize=$pageSize");
 
         if (null !== $sort) {
             $url .= '&sort=' . $sort . ':';
@@ -303,7 +303,7 @@ class BatchMember extends AbstractRestService
     public function getLogFile($token, $uploadId)
     {
         return $this->client->get(
-            $this->getUrl("batchmemberservice/$token/batchmember/{uploadId}/getLogFile")
+            $this->getUrl("batchmemberservice/$token/batchmember/$uploadId/getLogFile")
         );
     }
 
@@ -318,7 +318,7 @@ class BatchMember extends AbstractRestService
     public function getBadFile($token, $uploadId)
     {
         return $this->client->get(
-            $this->getUrl("batchmemberservice/$token/batchmember/{uploadId}/getBadFile")
+            $this->getUrl("batchmemberservice/$token/batchmember/$uploadId/getBadFile")
         );
     }
 
