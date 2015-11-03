@@ -18,16 +18,7 @@ to inject and use his own components where appropriate.
 
 ## Install
 
-Add the following to composer.json:
-
-    "require": {
-        "estina/smartfocus": "dev-master"
-    }
-
-install as you normally do:
-
-    php composer.phar install
-
+    composer require estina/smartfocus
 
 ### Usage
 
