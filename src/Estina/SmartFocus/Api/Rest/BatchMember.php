@@ -345,7 +345,7 @@ class BatchMember extends AbstractRestService
     }
 
     /**
-     * @param string filepath
+     * @param string $filepath
      *
      * @return string
      */
