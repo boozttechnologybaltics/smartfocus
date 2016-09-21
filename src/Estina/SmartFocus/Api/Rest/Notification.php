@@ -79,32 +79,41 @@ class Notification extends AbstractRestService
     /**
      * Builds up a transactional xml request object for batch processing.
      *
-     * @param array $params The mail parameters.
+     * @param string $recipientEmail The recipient email.
+     * @param string $encryptId The encrypt id for the template.
+     * @param string $randomId The random id for the template.
      * @param array|null $dyn The dynamic content.
      * @param array|null $content The content block links.
      * @param bool $enableTracking Set EMV URL in the urls found?
+     * @param array $additionalParams Any additional params to send off.
      *
      * @return SimpleXMLElement
      */
-    public function buildTransactionalRequestObject(array $params, array $dyn = null, array $content = null, $enableTracking = false)
-    {
+    public function buildTransactionalRequestObject(
+        $recipientEmail,
+        $encryptId,
+        $randomId,
+        array $dyn = null,
+        array $content = null,
+        $enableTracking = false,
+        array $additionalParams = null
+    ) {
         $xmlObject = new SimpleXMLElement('<MultiSendRequest></MultiSendRequest>');
 
-        $send_request = $xmlObject->addChild('sendrequest');
+        $sendRequest = $xmlObject->addChild('sendrequest');
+        $sendRequest->addChild('email');
+        $xmlObject->sendrequest->email = $recipientEmail;
+        $sendRequest->addChild('encrypt');
+        $xmlObject->sendrequest->encrypt = $encryptId;
+        $sendRequest->addChild('random');
+        $xmlObject->sendrequest->random = $randomId;
 
-        $send_request->addChild('email');
-        $send_request->addChild('encrypt');
-        $send_request->addChild('random');
-        $send_request->addChild('senddate');
-        $send_request->addChild('synchrotype');
-        $send_request->addChild('uidkey');
-
-        $xmlObject->sendrequest->encrypt = $params['encrypt'];
-        $xmlObject->sendrequest->random = $params['random'];
-        $xmlObject->sendrequest->email = $params['email'];
-        $xmlObject->sendrequest->senddate = $params['send_date'];
-        $xmlObject->sendrequest->synchrotype = $params['synchro_type'];
-        $xmlObject->sendrequest->uidkey = $params['uid_key'];
+        if (is_array($additionalParams)) {
+            foreach ($additionalParams as $key => $value) {
+                $sendRequest->addChild($key);
+                $sendRequest->$key = $value;
+            }
+        }
 
         if (is_array($dyn)) {
             $this->setDynInXMLObject($xmlObject->sendrequest, $dyn);

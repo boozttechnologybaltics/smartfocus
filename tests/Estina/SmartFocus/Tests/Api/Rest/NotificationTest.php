@@ -89,16 +89,15 @@ class NotificationTest extends PHPUnit_Framework_TestCase
     public function testBuildTransactionalRequestObjectWithoutDynAndContent()
     {
         $service = $this->getService();
-        $params = [
-            'encrypt' => 'asdf',
-            'random' => 'asdjhfk',
-            'email' => 'real@email.com',
-            'send_date' => '10.05.2016',
-            'synchro_type' => 'xml',
-            'uid_key' => '271162'
-        ];
+        $email = 'real@email.com';
+        $encryptId = 'asdf';
+        $randomId = 'asdjhfk';
 
-        $result = $service->buildTransactionalRequestObject($params);
+        $result = $service->buildTransactionalRequestObject(
+            $email,
+            $encryptId,
+            $randomId
+        );
 
         $this->assertInstanceOf(SimpleXMLElement::class, $result);
         $this->assertFalse(property_exists($result->sendrequest, 'dyn'));
@@ -108,23 +107,30 @@ class NotificationTest extends PHPUnit_Framework_TestCase
     /**
      * Test that buildTransactionalRequestObject works as expected.
      */
-    public function testBuildTransactionalRequestObjectWithDyn()
+    public function testBuildTransactionalRequestObjectWithDynAndAdditionalParams()
     {
         $service = $this->getService();
-        $params = [
-            'encrypt' => 'asdf',
-            'random' => 'asdjhfk',
-            'email' => 'real@email.com',
-            'send_date' => '10.05.2016',
-            'synchro_type' => 'xml',
-            'uid_key' => '271162'
-        ];
+
+        $email = 'real@email.com';
+        $encryptId = 'asdf';
+        $randomId = 'asdjhfk';
+
         $dyn = [
             'name' => 'Abdul',
             'email' => 'abdul@easyfundraising.org.uk'
         ];
 
-        $result = $service->buildTransactionalRequestObject($params, $dyn);
+        $additionalParams = array('senddate' => '10.05.2016', 'stuff' => 'xyz');
+
+        $result = $service->buildTransactionalRequestObject(
+            $email,
+            $encryptId,
+            $randomId,
+            $dyn,
+            null,
+            false,
+            $additionalParams
+        );
 
         $this->assertInstanceOf(SimpleXMLElement::class, $result);
         $this->assertInstanceOf(SimpleXMLElement::class, $result->sendrequest->dyn);
@@ -134,6 +140,9 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result->sendrequest->dyn->entry[1]->value, 'abdul@easyfundraising.org.uk');
 
         $this->assertFalse(property_exists($result->sendrequest, 'content'));
+        $this->assertTrue(property_exists($result->sendrequest, 'senddate'));
+        $this->assertEquals($result->sendrequest->senddate, '10.05.2016');
+        $this->assertEquals($result->sendrequest->stuff, 'xyz');
     }
 
     /**
@@ -142,10 +151,12 @@ class NotificationTest extends PHPUnit_Framework_TestCase
     public function testBuildTransactionalRequestObjectWithDynAndContentAndTracking()
     {
         $service = $this->getService();
+
+        $email = 'real@email.com';
+        $encryptId = 'asdf';
+        $randomId = 'asdjhfk';
+
         $params = [
-            'encrypt' => 'asdf',
-            'random' => 'asdjhfk',
-            'email' => 'real@email.com',
             'send_date' => '10.05.2016',
             'synchro_type' => 'xml',
             'uid_key' => '271162'
@@ -160,11 +171,7 @@ class NotificationTest extends PHPUnit_Framework_TestCase
             'image <img src="https://dont.track/this?up=false">'
         ];
 
-        $result = $service->buildTransactionalRequestObject($params, $dyn, $content, true);
-        $result2 = $service->buildTransactionalRequestObject($params, $dyn, $content);
-
-        // Assert the default is not true for tracking.
-        $this->assertNotEquals($result, $result2);
+        $result = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, true, $params);
 
         $this->assertInstanceOf(SimpleXMLElement::class, $result);
         $this->assertInstanceOf(SimpleXMLElement::class, $result->sendrequest->dyn);
@@ -189,14 +196,11 @@ class NotificationTest extends PHPUnit_Framework_TestCase
     public function testBuildTransactionalRequestObjectWithDynAndContentAndWithoutTracking()
     {
         $service = $this->getService();
-        $params = [
-            'encrypt' => 'asdf',
-            'random' => 'asdjhfk',
-            'email' => 'real@email.com',
-            'send_date' => '10.05.2016',
-            'synchro_type' => 'xml',
-            'uid_key' => '271162'
-        ];
+
+        $email = 'real@email.com';
+        $encryptId = 'asdf';
+        $randomId = 'asdjhfk';
+
         $dyn = [
             'name' => 'Abdul',
             'email' => 'abdul@easyfundraising.org.uk'
@@ -207,8 +211,8 @@ class NotificationTest extends PHPUnit_Framework_TestCase
             'image <img src="https://dont.track/this?up=false">'
         ];
 
-        $result = $service->buildTransactionalRequestObject($params, $dyn, $content, false);
-        $result2 = $service->buildTransactionalRequestObject($params, $dyn, $content);
+        $result = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, false);
+        $result2 = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content);
 
         // Assert the default is false for tracking.
         $this->assertEquals($result, $result2);
