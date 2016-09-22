@@ -140,7 +140,6 @@ class Notification extends AbstractRestService
 
         // Add dyn tags to the request object.
         foreach ($dyn as $key => $value) {
-            $v = str_replace('£', '&pound;', $value);
             $entry = $xmlObject->dyn->addChild('entry');
             $entry->key = $key;
             $entry->value = $value;

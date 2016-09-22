@@ -7,10 +7,6 @@
             "name": "Mindaugas Liubinas",
             "email": "mindaugas.l@estina.lt",
             "homepage": "http://www.estina.com/"
-        },
-        {
-            "name": "Abdul Qureshi",
-            "email": "abdul@easyfundraising.org.uk"
         }
     ],
     "minimum-stability": "dev",
