@@ -2,10 +2,9 @@
 
 namespace Estina\SmartFocus\Api\Http;
 
-use Estina\SmartFocus\Api\Http\ClientInterface;
 
 /**
- * Simple object oriented cURL wrapper
+ * Simple object oriented cURL wrapper.
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
@@ -15,7 +14,7 @@ class CurlClient implements ClientInterface
     private $timeout;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param int $timeout The maximum number of seconds to allow cURL functions to execute, default - 10
      */
@@ -45,7 +44,7 @@ class CurlClient implements ClientInterface
     }
 
     /**
-     * Performs GET request
+     * Performs GET request.
      *
      * @param string $url URL
      *
@@ -61,7 +60,7 @@ class CurlClient implements ClientInterface
     }
 
     /**
-     * Performs POST request
+     * Performs POST request.
      *
      * @param string $url URL
      * @param string $xml XML request body
@@ -78,12 +77,13 @@ class CurlClient implements ClientInterface
             'Accept: application/xml'
         ));
         $response = curl_exec($ch);
+        curl_close($ch);
 
         return $response;
     }
 
     /**
-     * Performs PUT request
+     * Performs PUT request.
      *
      * @param string $url    URL
      * @param array  $header Header
@@ -101,12 +101,13 @@ class CurlClient implements ClientInterface
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         $response = curl_exec($ch);
+        curl_close($ch);
 
         return $response;
     }
 
     /**
-     * Initializes cURL session and sets common options
+     * Initializes cURL session and sets common options.
      *
      * @param string $url
      *
