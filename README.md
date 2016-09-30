@@ -82,6 +82,8 @@ as it implements a very simple Api\Http\ClientInterface.
 ##### Notification REST
 
 - [send($email, $encrypt, $notificationId, $random, $dyn, $senddate, $uidkey, $stype)] (#notificationsendemail-encrypt-notificationid-random-dyn-senddate-uidkey-stype)
+- buildTransactionalRequestObject($recipientEmail, $encryptId, $randomId, $dyn, $content, $enableTracking, $additionalParams)
+- post(SimpleXMLElement $xmlRequestObject)
 
 ### API Examples
 
@@ -224,7 +226,54 @@ $response = $api->send(
     'NOTHING'             // optional, The type of synchronization
 );
 ```
+### Notification::post(SimpleXMLElement $xmlRequestObject)
+```php
+// cURL client for communication with API
+use Estina\SmartFocus\Api\Http\CurlClient;
+// Member REST API class
+use Estina\SmartFocus\Api\Rest\Notification;
 
+// initialize object, injecting the cURL client
+$api = new Notification(new CurlClient());
+
+$recipientEmail = 'email@example.com';
+$encryptId = 'abcdefg';
+$randomId = '132456';
+
+$additionalParams = array(
+    'YYYY-MM-DD HH:MM:SS'
+    'email'
+    'NOTHING'
+);
+
+// Optional: Dynamic parameters as an array
+$dyn = array(
+    'firstname' => 'John',
+    'lastname' => 'Smith'
+);
+
+$content = array(
+    'click <a href="http://somewhere.com">here</a> please',
+    'good stuff is available <a href="http://goodstuff.com">here</a>'
+);
+
+// Tracking enabled for the links passed in the content blocks.
+$enableTracking = true;
+
+// Build request object.
+$xmlRequestObject = $api->buildTransactionalRequestObject(
+    $recipientEmail,
+    $encryptId,
+    $randomId,
+    $dyn,
+    $content,
+    $enableTracking,
+    $additionalParams
+);
+
+// Make the request.
+$response = $api->post($xmlRequestObject);
+```
 
 ## Troubleshooting
 
