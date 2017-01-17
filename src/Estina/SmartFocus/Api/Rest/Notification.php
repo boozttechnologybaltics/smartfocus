@@ -16,7 +16,7 @@ class Notification extends AbstractRestService
     {
         parent::__construct($client);
 
-        $this->setUrlPrefix('http://api.notificationmessaging.com');
+        $this->setUrlPrefix('https://api.notificationmessaging.com');
     }
 
     /**
