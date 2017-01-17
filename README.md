@@ -213,17 +213,14 @@ use Estina\SmartFocus\Api\Rest\Notification;
 $api = new Notification(new CurlClient());
 
 $response = $api->send(
-    'email@example.com',       // Recipient
-    'abcdefg',                 // Encrypt value provided in the interface
-    '132456',                  // ID of the Template
-    '123456789',               // Random value provided for the template
-    array(                     // Dynamic parameters as an array
-        'firstname' => 'John',
-        'lastname' => 'Smith'
-    ),
-    'YYYY-MM-DD HH:MM:SS' // optional, The time you wish to send
-    'email'               // optional, the key you wish to update, normally its email
-    'NOTHING'             // optional, The type of synchronization
+    'email@example.com',            // Recipient
+    'abcdefg',                      // Encrypt value provided in the interface
+    '132456',                       // ID of the Template
+    '123456789',                    // Random value provided for the template
+    'firstname:John|lastname:Smith' // Dynamic parameters as a string
+    'YYYY-MM-DD HH:MM:SS'           // optional, The time you wish to send
+    'email'                         // optional, the key you wish to update, normally email
+    'NOTHING'                       // optional, The type of synchronization
 );
 ```
 ### Notification::post(SimpleXMLElement $xmlRequestObject)
@@ -241,9 +238,9 @@ $encryptId = 'abcdefg';
 $randomId = '132456';
 
 $additionalParams = array(
-    'YYYY-MM-DD HH:MM:SS'
-    'email'
-    'NOTHING'
+    'senddate'      => 'YYYY-MM-DDTHH:MM:SS' // 'T' between date & time
+    'uidkey'        => 'email'
+    'synchrotype'   => 'NOTHING'
 );
 
 // Optional: Dynamic parameters as an array
