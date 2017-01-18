@@ -213,14 +213,14 @@ use Estina\SmartFocus\Api\Rest\Notification;
 $api = new Notification(new CurlClient());
 
 $response = $api->send(
-    'email@example.com',            // Recipient
-    'abcdefg',                      // Encrypt value provided in the interface
-    '132456',                       // ID of the Template
-    '123456789',                    // Random value provided for the template
-    'firstname:John|lastname:Smith' // Dynamic parameters as a string
-    'YYYY-MM-DD HH:MM:SS'           // optional, The time you wish to send
-    'email'                         // optional, the key you wish to update, normally email
-    'NOTHING'                       // optional, The type of synchronization
+    'email@example.com',             // Recipient
+    'abcdefg',                       // Encrypt value provided in the interface
+    '132456',                        // ID of the Template
+    '123456789',                     // Random value provided for the template
+    'firstname:John|lastname:Smith', // Dynamic parameters as a string
+    'YYYY-MM-DD HH:MM:SS',            // optional, The time you wish to send
+    'email',                          // optional, the key you wish to update, normally email
+    'NOTHING'                        // optional, The type of synchronization
 );
 ```
 ### Notification::post(SimpleXMLElement $xmlRequestObject)
@@ -237,22 +237,22 @@ $recipientEmail = 'email@example.com';
 $encryptId = 'abcdefg';
 $randomId = '132456';
 
-$additionalParams = array(
-    'senddate'      => 'YYYY-MM-DDTHH:MM:SS' // 'T' between date & time
-    'uidkey'        => 'email'
+$additionalParams = [
+    'senddate'      => 'YYYY-MM-DDTHH:MM:SS', // 'T' between date & time
+    'uidkey'        => 'email',
     'synchrotype'   => 'NOTHING'
-);
+];
 
 // Optional: Dynamic parameters as an array
-$dyn = array(
+$dyn = [
     'firstname' => 'John',
     'lastname' => 'Smith'
-);
+];
 
-$content = array(
+$content = [
     'click <a href="http://somewhere.com">here</a> please',
     'good stuff is available <a href="http://goodstuff.com">here</a>'
-);
+];
 
 // Tracking enabled for the links passed in the content blocks.
 $enableTracking = true;
