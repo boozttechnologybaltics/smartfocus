@@ -270,7 +270,7 @@ class Member extends AbstractRestService
     public function getMembersByPage($token, $page)
     {
         $response = $this->client->get(
-            $this->getUrl("member/getListMembersByPage/$token/$page")
+            $this->getUrl("getListMembersByPage/$token/$page")
         );
 
         return $response;
