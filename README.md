@@ -216,8 +216,8 @@ $response = $api->send(
     '132456',                        // ID of the Template
     '123456789',                     // Random value provided for the template
     'firstname:John|lastname:Smith', // Dynamic parameters as a string
-    'YYYY-MM-DD HH:MM:SS',            // optional, The time you wish to send
-    'email',                          // optional, the key you wish to update, normally email
+    'YYYY-MM-DD HH:MM:SS',           // optional, The time you wish to send
+    'email',                         // Now *REQUIRED* - the key you wish to update, normally email
     'NOTHING'                        // optional, The type of synchronization
 );
 ```

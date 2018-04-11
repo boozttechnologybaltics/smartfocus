@@ -22,7 +22,7 @@ class Notification extends AbstractRestService
     /**
      * @param string $email          The email address to which you wish to send the transactional message
      * @param string $encrypt        The encrypt value provided in the interface
-     * @param string $notificationId The ID of the Template
+     * @param string $notificationId The ID of the template - currently ignored - random & uidkey determine template?
      * @param string $random         The random value provided for the template
      * @param string $dyn            Dynamic personalization content, format: "syncKey:value|field:value|field:value"
      * @param string $senddate       The time you wish to send the Transactional Message, (time in the past = send now)
@@ -41,6 +41,10 @@ class Notification extends AbstractRestService
         $uidkey = '',
         $stype = 'NOTHING'
     ) {
+        if (empty($uidkey)) {
+            throw new \InvalidArgumentException('uidkey must not be blank');
+        }
+
         $params = array(
             'random' => $random,
             'encrypt' => $encrypt,
