@@ -85,11 +85,16 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $email = 'real@email.com';
         $encryptId = 'asdf';
         $randomId = 'asdjhfk';
+        $uidkey = 'myUidKey';
 
         $result = $service->buildTransactionalRequestObject(
             $email,
             $encryptId,
-            $randomId
+            $randomId,
+            null,
+            null,
+            false,
+            array('uidkey' => $uidkey)
         );
 
         $this->assertInstanceOf(SimpleXMLElement::class, $result);
@@ -113,7 +118,7 @@ class NotificationTest extends PHPUnit_Framework_TestCase
             'email' => 'abdul@easyfundraising.org.uk'
         ];
 
-        $additionalParams = array('senddate' => '10.05.2016', 'stuff' => 'xyz');
+        $additionalParams = array('senddate' => '10.05.2016', 'stuff' => 'xyz', 'uidkey' => 'someUidKey');
 
         $result = $service->buildTransactionalRequestObject(
             $email,
@@ -152,7 +157,7 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $params = [
             'send_date' => '10.05.2016',
             'synchro_type' => 'xml',
-            'uid_key' => '271162'
+            'uidkey' => '271162'
         ];
         $dyn = [
             'name' => 'Abdul',
@@ -203,11 +208,14 @@ class NotificationTest extends PHPUnit_Framework_TestCase
             "click <a href='https://track.this/up?enabled=true&index=2#stuff'>here 2</a>",
             'image <img src="https://dont.track/this?up=false">'
         ];
+        $params = array(
+            'uidkey' => 'theUidKey',
+        );
 
-        $result = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, false);
-        $result2 = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content);
+        $result = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, false, $params);
+        $result2 = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, null, $params);
 
-        // Assert the default is false for tracking.
+        // Assert the default is false for tracking. TODO probably remove this? it doesn't really test much now.
         $this->assertEquals($result, $result2);
 
         $this->assertInstanceOf(SimpleXMLElement::class, $result);

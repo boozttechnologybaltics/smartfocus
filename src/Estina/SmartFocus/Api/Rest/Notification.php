@@ -20,10 +20,10 @@ class Notification extends AbstractRestService
     }
 
     /**
-     * @param string $email          The email address to which you wish to send the transactional message
-     * @param string $encrypt        The encrypt value provided in the interface
+     * @param string $recipientEmail The email address to which you wish to send the transactional message
+     * @param string $encryptId      The encrypt value provided in the interface
      * @param string $notificationId The ID of the template - currently ignored - random & uidkey determine template?
-     * @param string $random         The random value provided for the template
+     * @param string $randomId       The random value provided for the template
      * @param string $dynString      Dynamic personalization content, format: "syncKey:value|field:value|field:value"
      * @param string $senddate       The time you wish to send the Transactional Message, (time in the past = send now)
      * @param string $uidkey         The key you wish to update, normally its email
@@ -32,23 +32,19 @@ class Notification extends AbstractRestService
      * @return string|bool XML response or FALSE on failure
      */
     public function send(
-        $email,
-        $encrypt,
+        $recipientEmail,
+        $encryptId,
         $notificationId,
-        $random,
+        $randomId,
         $dynString,
         $senddate = '2008-12-12 00:00:00',
         $uidkey = '',
         $stype = 'NOTHING'
     ) {
-        if (empty($uidkey)) {
-            throw new \InvalidArgumentException('uidkey must not be blank');
-        }
-
-        $params = array(
+        $additionalParams = array(
             'senddate' => $senddate,
             'uidkey' => $uidkey,
-            'stype' => $stype
+            'stype' => $stype,
         );
 
         $dyn = array();
@@ -60,7 +56,7 @@ class Notification extends AbstractRestService
             }
         }
 
-        $xmlObject = $this->buildTransactionalRequestObject($email, $encrypt, $random, $dyn, null, false, $params);
+        $xmlObject = $this->buildTransactionalRequestObject($recipientEmail, $encryptId, $randomId, $dyn, null, false, $additionalParams);
 
         return $this->post($xmlObject);
     }
@@ -103,6 +99,10 @@ class Notification extends AbstractRestService
         $enableTracking = false,
         array $additionalParams = null
     ) {
+        if (empty($additionalParams['uidkey'])) {
+            throw new \InvalidArgumentException('uidkey must not be blank');
+        }
+
         $xmlObject = new SimpleXMLElement('<MultiSendRequest></MultiSendRequest>');
 
         $sendRequest = $xmlObject->addChild('sendrequest');
