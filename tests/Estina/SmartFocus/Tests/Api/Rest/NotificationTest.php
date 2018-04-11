@@ -1,10 +1,10 @@
 <?php
 
-namespace Estina\SmartFocus\Tests;
+namespace Estina\SmartFocus\Tests\Api\Rest;
 
+use Estina\SmartFocus\Api\Rest\Notification;
 use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
-use Estina\SmartFocus\Api\Rest\Notification;
 use SimpleXMLElement;
 
 /**
@@ -16,10 +16,7 @@ use SimpleXMLElement;
  */
 class NotificationTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Tests send.
-     */
-    public function testSend()
+    public function testSendSuccess()
     {
         $email = 'test@example.com';
         $encrypt = 'The encrypt value';
@@ -29,36 +26,32 @@ class NotificationTest extends PHPUnit_Framework_TestCase
 
         $service = $this->getService();
         $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->never())
+            ->method('get');
         $client->expects($this->once())
-               ->method('get');
-        $response = $service->send($email, $encrypt, $notificationId, $random, $dyn);
+            ->method('post');
+
+        $service->send($email, $encrypt, $notificationId, $random, $dyn, '2018-12-12 00:00:00', 'someuidkey');
+
+        $this->addToAssertionCount(1); // We've implicitly asserted no exceptions hit
     }
 
-    /**
-     * @return Notification
-     */
-    private function getService($openConnection = true)
+    public function testSendWithUidkeyMissing()
     {
-        $client = $this->getMock('Estina\SmartFocus\Api\Http\CurlClient');
-        $service = new Notification($client);
+        $this->setExpectedException('\\InvalidArgumentException', 'uidkey must not be blank');
 
-        return $service;
-    }
+        $email = 'test@example.com';
+        $encrypt = 'The encrypt value';
+        $notificationId = 'template ID';
+        $random = 'The random value';
+        $dyn = 'field1:value1|field2:value2';
 
-    /**
-     * Return value protected/private property from object.
-     *
-     * @param object $object Target object
-     * @param string $name   Name of hidden property
-     *
-     * @return object
-     */
-    private function getHiddenProperty($object, $name)
-    {
-        $refl = new ReflectionProperty(get_class($object), $name);
-        $refl->setAccessible(true);
+        $service = $this->getService();
+        $client = $this->getHiddenProperty($service, 'client');
+        $client->expects($this->never())
+            ->method('post');
 
-        return $refl->getValue($object);
+        $service->send($email, $encrypt, $notificationId, $random, $dyn);
     }
 
     /**
@@ -92,11 +85,16 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $email = 'real@email.com';
         $encryptId = 'asdf';
         $randomId = 'asdjhfk';
+        $uidkey = 'myUidKey';
 
         $result = $service->buildTransactionalRequestObject(
             $email,
             $encryptId,
-            $randomId
+            $randomId,
+            null,
+            null,
+            false,
+            array('uidkey' => $uidkey)
         );
 
         $this->assertInstanceOf(SimpleXMLElement::class, $result);
@@ -120,7 +118,7 @@ class NotificationTest extends PHPUnit_Framework_TestCase
             'email' => 'abdul@easyfundraising.org.uk'
         ];
 
-        $additionalParams = array('senddate' => '10.05.2016', 'stuff' => 'xyz');
+        $additionalParams = array('senddate' => '10.05.2016', 'stuff' => 'xyz', 'uidkey' => 'someUidKey');
 
         $result = $service->buildTransactionalRequestObject(
             $email,
@@ -159,7 +157,7 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $params = [
             'send_date' => '10.05.2016',
             'synchro_type' => 'xml',
-            'uid_key' => '271162'
+            'uidkey' => '271162'
         ];
         $dyn = [
             'name' => 'Abdul',
@@ -210,11 +208,14 @@ class NotificationTest extends PHPUnit_Framework_TestCase
             "click <a href='https://track.this/up?enabled=true&index=2#stuff'>here 2</a>",
             'image <img src="https://dont.track/this?up=false">'
         ];
+        $params = array(
+            'uidkey' => 'theUidKey',
+        );
 
-        $result = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, false);
-        $result2 = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content);
+        $result = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, false, $params);
+        $result2 = $service->buildTransactionalRequestObject($email, $encryptId, $randomId, $dyn, $content, null, $params);
 
-        // Assert the default is false for tracking.
+        // Assert the default is false for tracking. TODO probably remove this? it doesn't really test much now.
         $this->assertEquals($result, $result2);
 
         $this->assertInstanceOf(SimpleXMLElement::class, $result);
@@ -232,5 +233,32 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result->sendrequest->content->entry[1]->value, "click <a href='https://track.this/up?enabled=true&index=2#stuff'>here 2</a>");
         // Unchanged.
         $this->assertEquals($result->sendrequest->content->entry[2]->value, 'image <img src="https://dont.track/this?up=false">');
+    }
+
+    /**
+     * @return Notification
+     */
+    private function getService($openConnection = true)
+    {
+        $client = $this->getMock('Estina\SmartFocus\Api\Http\CurlClient');
+        $service = new Notification($client);
+
+        return $service;
+    }
+
+    /**
+     * Return value protected/private property from object.
+     *
+     * @param object $object Target object
+     * @param string $name   Name of hidden property
+     *
+     * @return object
+     */
+    private function getHiddenProperty($object, $name)
+    {
+        $refl = new ReflectionProperty(get_class($object), $name);
+        $refl->setAccessible(true);
+
+        return $refl->getValue($object);
     }
 }

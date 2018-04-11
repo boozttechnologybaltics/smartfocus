@@ -4,17 +4,14 @@
 
 This is a PHP library for SmartFocus API.
 
-This library provides access to SmartFocus (previously known as EmailVision) [Campaign Commander's APIs]
-(http://developer.smartfocus.com/io-docs). It was designed with flexibility in mind, with fully decoupled components, so it would be easy for developer
+This library provides access to SmartFocus (previously known as EmailVision) [Campaign Commander's APIs](https://help-developer.smartfocus.com/#Home.htm%3FTocPath%3D_____1). It was designed with flexibility in mind, with fully decoupled components, so it would be easy for developer
 to inject and use his own components where appropriate.
-
 
 ## Requirements
 
-- PHP 5.x+
+- PHP 5.3+
 - curl
 - libxml
-
 
 ## Install
 
@@ -36,9 +33,9 @@ as it implements a very simple Api\Http\ClientInterface.
 
 #### Supported APIs and Methods
 
-- [Member REST] (#member-rest) - individual subscription management
-- [Batch Member REST] (#batch-member-rest) - batch subscription management
-- [Notification REST] (#notification-rest) - notification (email sending) service
+- [Member REST](#member-rest) - individual subscription management
+- [Batch Member REST](#batch-member-rest) - batch subscription management
+- [Notification REST](#notification-rest) - notification (email sending) service
 
 ##### Member REST
 
@@ -218,8 +215,8 @@ $response = $api->send(
     '132456',                        // ID of the Template
     '123456789',                     // Random value provided for the template
     'firstname:John|lastname:Smith', // Dynamic parameters as a string
-    'YYYY-MM-DD HH:MM:SS',            // optional, The time you wish to send
-    'email',                          // optional, the key you wish to update, normally email
+    'YYYY-MM-DD HH:MM:SS',           // optional, The time you wish to send
+    'email',                         // Now *REQUIRED* - the key you wish to update, normally email
     'NOTHING'                        // optional, The type of synchronization
 );
 ```
@@ -289,11 +286,12 @@ Check the following:
 <memberUID>EMAIL:email@example.com</memberUID>
 ```
 
+## Unit test
+
+    composer test
+
 ## More information
 
 SmartFocus documentation is available in the "doc" folder. Also, more detailed
 descriptions of all functions and their parameters are available in the source
 code.
-
-
-

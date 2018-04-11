@@ -20,56 +20,57 @@ class Notification extends AbstractRestService
     }
 
     /**
-     * @param string $email          The email address to which you wish to send the transactional message
-     * @param string $encrypt        The encrypt value provided in the interface
-     * @param string $notificationId The ID of the Template
-     * @param string $random         The random value provided for the template
-     * @param string $dyn            Dynamic personalization content, format: "syncKey:value|field:value|field:value"
+     * @param string $recipientEmail The email address to which you wish to send the transactional message
+     * @param string $encryptId      The encrypt value provided in the interface
+     * @param string $notificationId The ID of the template - currently ignored - random & uidkey determine template?
+     * @param string $randomId       The random value provided for the template
+     * @param string $dynString      Dynamic personalization content, format: "syncKey:value|field:value|field:value"
      * @param string $senddate       The time you wish to send the Transactional Message, (time in the past = send now)
      * @param string $uidkey         The key you wish to update, normally its email
      * @param string $stype          The type of synchronization that should be carried out
      *
-     * @return string|false XML response or FALSE on failure
+     * @return string|bool XML response or FALSE on failure
      */
     public function send(
-        $email,
-        $encrypt,
+        $recipientEmail,
+        $encryptId,
         $notificationId,
-        $random,
-        $dyn,
+        $randomId,
+        $dynString,
         $senddate = '2008-12-12 00:00:00',
         $uidkey = '',
         $stype = 'NOTHING'
     ) {
-        $params = array(
-            'random' => $random,
-            'encrypt' => $encrypt,
-            'email' => $email,
+        $additionalParams = array(
             'senddate' => $senddate,
             'uidkey' => $uidkey,
-            'stype' => $stype
+            'stype' => $stype,
         );
 
-        $response = $this->client->get(
-            $this->getUrl("NMSREST?" . http_build_query($params) . "&dyn=" . $dyn)
-        );
+        $dyn = array();
+        $dynPairs = explode('|', $dynString);
+        if (count($dynPairs) > 0) {
+            foreach ($dynPairs as $dynPair) {
+                list($dynKey, $dynValue) = explode(':', $dynPair);
+                $dyn[$dynKey] = $dynValue;
+            }
+        }
 
-        return $response;
+        $xmlObject = $this->buildTransactionalRequestObject($recipientEmail, $encryptId, $randomId, $dyn, null, false, $additionalParams);
+
+        return $this->post($xmlObject);
     }
 
     /**
-     * Send batch of email transactions at once.
-     *
-     * Also supports sending of dynamic content.
+     * Send an email with a prepared XML REST body. Supports sending of dynamic content.
      *
      * @param SimpleXMLElement $xmlObject The xml object to post.
-     *
-     * @return string|false XML response or FALSE on failure
+     * @return string|bool XML response or FALSE on failure
      */
     public function post(SimpleXMLElement $xmlObject)
     {
         $response = $this->client->post(
-            $this->getUrl("NMSXML"),
+            $this->getUrl('NMSXML'),
             $xmlObject->asXML()
         );
 
@@ -98,6 +99,10 @@ class Notification extends AbstractRestService
         $enableTracking = false,
         array $additionalParams = null
     ) {
+        if (empty($additionalParams['uidkey'])) {
+            throw new \InvalidArgumentException('uidkey must not be blank');
+        }
+
         $xmlObject = new SimpleXMLElement('<MultiSendRequest></MultiSendRequest>');
 
         $sendRequest = $xmlObject->addChild('sendrequest');

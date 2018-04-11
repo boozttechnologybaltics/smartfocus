@@ -1,11 +1,10 @@
 <?php
 
-namespace Estina\SmartFocus\Tests;
-
-use PHPUnit_Framework_TestCase;
-use ReflectionProperty;
+namespace Estina\SmartFocus\Tests\Api\Rest;
 
 use Estina\SmartFocus\Api\Rest\Member;
+use PHPUnit_Framework_TestCase;
+use ReflectionProperty;
 
 /**
  * Member Test
@@ -32,8 +31,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->openConnection($server, $login, $password, $key);
-
+        $service->openConnection($server, $login, $password, $key);
     }
 
     /*
@@ -43,7 +41,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('InvalidArgumentException');
         $service = $this->getService(false);
-        $response = $service->closeConnection($this->token);
+        $service->closeConnection($this->token);
     }
 
     /**
@@ -55,7 +53,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->closeConnection($this->token);
+        $service->closeConnection($this->token);
     }
 
     /**
@@ -67,7 +65,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->insertMemberByEmailAddress($this->token, $this->email);
+        $service->insertMemberByEmailAddress($this->token, $this->email);
     }
 
     /**
@@ -79,7 +77,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('post');
-        $response = $service->insertMember($this->token, $this->xml);
+        $service->insertMember($this->token, $this->xml);
     }
 
     /**
@@ -91,7 +89,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('post');
-        $response = $service->updateMember($this->token, $this->xml);
+        $service->updateMember($this->token, $this->xml);
     }
 
     /**
@@ -103,7 +101,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('post');
-        $response = $service->insertOrUpdateMember($this->token, $this->xml);
+        $service->insertOrUpdateMember($this->token, $this->xml);
     }
 
     /**
@@ -115,7 +113,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->updateMemberByEmailAddress($this->token, $this->email, 'field', 'value');
+        $service->updateMemberByEmailAddress($this->token, $this->email, 'field', 'value');
     }
 
     /**
@@ -127,7 +125,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->getMemberJobStatus($this->token, 'jobId');
+        $service->getMemberJobStatus($this->token, 'jobId');
     }
 
     /**
@@ -139,7 +137,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->getMemberByEmail($this->token, $this->email);
+        $service->getMemberByEmail($this->token, $this->email);
     }
 
     /**
@@ -151,7 +149,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->getMemberByCellphone($this->token, '123456789');
+        $service->getMemberByCellphone($this->token, '123456789');
     }
 
     /**
@@ -163,7 +161,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->getMemberById($this->token, '12345');
+        $service->getMemberById($this->token, '12345');
     }
 
     /**
@@ -175,7 +173,7 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->getMembersByPage($this->token, '1');
+        $service->getMembersByPage($this->token, '1');
     }
 
     /**
@@ -187,9 +185,8 @@ class MemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('post');
-        $response = $service->getMembersByCriteria($this->token, $this->xml);
+        $service->getMembersByCriteria($this->token, $this->xml);
     }
-
 
     /**
      * tests getMemberTableColumnNames
