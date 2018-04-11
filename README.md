@@ -14,7 +14,6 @@ to inject and use his own components where appropriate.
 - curl
 - libxml
 
-
 ## Install
 
     composer require estina/smartfocus
@@ -35,9 +34,9 @@ as it implements a very simple Api\Http\ClientInterface.
 
 #### Supported APIs and Methods
 
-- [Member REST] (#member-rest) - individual subscription management
-- [Batch Member REST] (#batch-member-rest) - batch subscription management
-- [Notification REST] (#notification-rest) - notification (email sending) service
+- [Member REST](#member-rest) - individual subscription management
+- [Batch Member REST](#batch-member-rest) - batch subscription management
+- [Notification REST](#notification-rest) - notification (email sending) service
 
 ##### Member REST
 
@@ -293,6 +292,3 @@ Check the following:
 SmartFocus documentation is available in the "doc" folder. Also, more detailed
 descriptions of all functions and their parameters are available in the source
 code.
-
-
-
