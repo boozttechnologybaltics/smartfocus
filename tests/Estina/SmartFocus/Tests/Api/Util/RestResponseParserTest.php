@@ -1,6 +1,6 @@
 <?php
 
-namespace Estina\SmartFocus\Tests;
+namespace Estina\SmartFocus\Tests\Api\Util;
 
 use PHPUnit_Framework_TestCase;
 

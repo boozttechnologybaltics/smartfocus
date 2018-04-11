@@ -22,6 +22,11 @@
             "Estina\\SmartFocus" : "src"
         }
     },
+    "autoload-dev": {
+        "psr-0": {
+            "Estina\\SmartFocus\\Tests": "tests/"
+        }
+    },
     "scripts": {
         "test": "./vendor/bin/phpunit"
     }

@@ -1,11 +1,10 @@
 <?php
 
-namespace Estina\SmartFocus\Tests;
-
-use PHPUnit_Framework_TestCase;
-use ReflectionProperty;
+namespace Estina\SmartFocus\Tests\Api\Rest;
 
 use Estina\SmartFocus\Api\Rest\Member;
+use PHPUnit_Framework_TestCase;
+use ReflectionProperty;
 
 /**
  * Member Test

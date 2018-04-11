@@ -1,6 +1,6 @@
 <?php
 
-namespace Estina\SmartFocus\Tests;
+namespace Estina\SmartFocus\Tests\Api\Rest;
 
 use Estina\SmartFocus\Api\Rest\Notification;
 use PHPUnit_Framework_TestCase;
