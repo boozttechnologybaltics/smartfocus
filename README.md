@@ -286,6 +286,10 @@ Check the following:
 <memberUID>EMAIL:email@example.com</memberUID>
 ```
 
+## Unit test
+
+    composer test
+
 ## More information
 
 SmartFocus documentation is available in the "doc" folder. Also, more detailed
