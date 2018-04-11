@@ -29,7 +29,7 @@ class BatchMember extends AbstractRestService
      * @param string $password API password
      * @param string $key      The manager key copied from SmartFocus
      *
-     * @return string|false
+     * @return string|bool Response or false
      */
     public function openConnection($server, $login, $password, $key)
     {
@@ -49,7 +49,7 @@ class BatchMember extends AbstractRestService
      *
      * @param string $token token
      *
-     * @return string|false
+     * @return string|bool Response or false
      */
     public function closeConnection($token)
     {

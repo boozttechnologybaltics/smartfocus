@@ -2,8 +2,6 @@
 
 namespace Estina\SmartFocus\Api\Http;
 
-use Estina\SmartFocus\Api\Http\ClientInterface;
-
 /**
  * Dummy Client for tests
  *
@@ -17,7 +15,7 @@ class DummyClient implements ClientInterface
      *
      * @param string $url URL
      *
-     * @return string|false
+     * @return string
      */
     public function get($url)
     {
@@ -30,21 +28,10 @@ class DummyClient implements ClientInterface
      * @param string $url URL
      * @param string $xml XML request body
      *
-     * @return string|false
+     * @return string
      */
     public function post($url, $xml)
     {
         return $xml;
     }
-
-    /**
-     * Performs PUT request
-     *
-     * @param string $url    URL
-     * @param array  $header Header
-     * @param string $body   Body
-     *
-     * @return mixed - XML string or FALSE in failure
-     */
-    public function put($url, $header, $body);
 }

@@ -20,7 +20,7 @@ class RestResponseParserTest extends PHPUnit_Framework_TestCase
     {
         $service = $this->getService();
         $this->setExpectedException('InvalidArgumentException');
-        $result = $service->getResult('');
+        $service->getResult('');
     }
 
     /**
@@ -33,7 +33,7 @@ class RestResponseParserTest extends PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             'Unknown error while parsing the response: <xml>invalid</xml>'
         );
-        $result = $service->getResult('<xml>invalid</xml>');
+        $service->getResult('<xml>invalid</xml>');
     }
 
     /**
@@ -46,8 +46,6 @@ class RestResponseParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hooray!', $result);
     }
 
-
-
     /**
      * @return RestResponseParser
      */
@@ -55,6 +53,4 @@ class RestResponseParserTest extends PHPUnit_Framework_TestCase
     {
         return new RestResponseParser();
     }
-
-
 }

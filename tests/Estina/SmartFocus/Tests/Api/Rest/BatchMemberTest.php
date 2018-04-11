@@ -41,7 +41,7 @@ class BatchMemberTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('InvalidArgumentException');
         $service = $this->getService(false);
-        $response = $service->closeConnection($this->token);
+        $service->closeConnection($this->token);
     }
 
     /**
@@ -53,7 +53,7 @@ class BatchMemberTest extends PHPUnit_Framework_TestCase
         $client = $this->getHiddenProperty($service, 'client');
         $client->expects($this->once())
                ->method('get');
-        $response = $service->closeConnection($this->token);
+        $service->closeConnection($this->token);
     }
 
     /**
@@ -91,6 +91,4 @@ class BatchMemberTest extends PHPUnit_Framework_TestCase
 
         return $refl->getValue($object);
     }
-
-
 }
