@@ -4,8 +4,7 @@
 
 This is a PHP library for SmartFocus API.
 
-This library provides access to SmartFocus (previously known as EmailVision) [Campaign Commander's APIs]
-(http://developer.smartfocus.com/io-docs). It was designed with flexibility in mind, with fully decoupled components, so it would be easy for developer
+This library provides access to SmartFocus (previously known as EmailVision) [Campaign Commander's APIs](https://help-developer.smartfocus.com/#SMART_EMAIL/Overview_of_the_Smart_Email_API.htm%3FTocPath%3DSmart%2520Email%2520API%2520-%2520REST%7C_____0). It was designed with flexibility in mind, with fully decoupled components, so it would be easy for developer
 to inject and use his own components where appropriate.
 
 
